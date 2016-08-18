@@ -1,0 +1,18 @@
+@palette
+ * PALETTE
+ * +----------------------------------+------------------------------ -+----------------------------------+------------------------------------+----------------------------------------+
+ * |         COLORS         | HEX.CODE|          ANALOG COLORS         |         COMPLEMENTARY COLORS     |         MONOCROMATIC COLORS        |             COMPOUND COLORS            |
+ * +----------------------------------+--------------------------------+----------------------------------+------------------------------------+----------------------------------------+
+ * |------------------------|---------|--------------------------------|----------------------------------|------------------------------------|----------------------------------------|
+ * | ABSOLUTE WHITE         | #FFFFFF |                                |                                  |                                    |                                        |
+ * | ABSOLUTE BLACK         | #000000 |                                |                                  |                                    |                                        |
+ * | HOLCIM WHITE           | #FCFEFC |R#FF0000 ORA#E8AE0C             |GR#00FF00-19FF19 MAG#FF007F-B20059|GRA#CACCCA W#FDFFFD GR#587F58-B0FFB0|GR#5A995A GRE#B9B5CC W#FEFFFC PUI#DABCFF|
+ * | HOLCIM RED             | #FC4344 |R#FF0D0D-#E80C0C                |GR#00FF47-00B232 R#FF0001         |BR#7F4848 PI#FF9091 R#FF4445-CC3637 |BR#995A5A W#FFFCFF YEL#EBFFBC OC#CCCCB5 | 
+ * | HOLCIM BLACK           | #232323 |R#FF0000                        |                                  |W#CCCCCC-FFFFFF BR#7F5959 PI#FFB2B2 |                                        |
+ * | HOLCIM GRAY            | #9B9B9B |R#FF0D0D                        |                                  |                                    |                                        |
+ * | HOLCIM SECOND RED      | #E83434 |                                |                                  |                                    |                                        |
+ * | HOLCIM BROWN           | #692628 |R#FF0F0D-#E80C0F                |                                  |                                    |                                        |
+ * | HOLCIM GRAY REFLECTIVE | #D1D3D1 |YEL#E8AE0C BLU#160CE8 GR#0DFF96 |GR#00FF00 MAG#FF007F-B20059       |PI#FFA9AB R#FF5C61-CC4A4E BR#7F5456 |GR#5A995A PU#DABCFF-B9B5CC              |
+ * | HOLCIM DARK GRAY       | #4C4B4C |ORA#FF530D ORA#E82C0C MAG#E80C7A|MAG#FF00FF GR#3EB200-59FF00       |PU#7F587F-FFAFFF W#FFFCFF-CCC9CC    |PU#995A99 0C#CCC7B5                     |
+ * | HOLCIM SECOND BROWN    | #453D3F |R#FF1E0D                        |R#FF0040-FF1953 GR#00FF24-00B219  |                                    |R#995A6A OC#FEFFBC-CCCB5 W#FFFCFF       |
+ * +----------------------------------+--------------------------------+----------------------------------+------------------------------------+----------------------------------------+
