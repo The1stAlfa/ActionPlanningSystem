@@ -38,7 +38,7 @@ public class ActionPlan {
     public ActionPlan(String id, Collaborator owner) {
         this.id = id;
         this.owner = owner;
-        this.date_modified = LocalDate.now();
+        this.date_created = LocalDate.now();
         this.summary = summary;
     }
 

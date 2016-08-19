@@ -3,6 +3,7 @@
  */
 package aps;
 import java.time.LocalDate;  
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -26,12 +27,12 @@ public class Action {
     private String comments;
     private String benefit;
     private String status;
-    private LocalDate creation_date;
-    private LocalDate last_update;
     private LocalDate planned_start_date;  // Equals to APP = As Per Plan
     private LocalDate planned_finish_date;
     private LocalDate real_finish_date;
     private short[] dependencies;  
+    private LocalDateTime date_created;
+    private LocalDateTime date_modified;
     
     /** 
     * Class Empty constructor.
@@ -68,6 +69,7 @@ public class Action {
         this.comments = comments;
         this.benefit = benefit;
         this.status = status;
+        this.date_created = LocalDateTime.now();
     }
 
     /**
@@ -246,22 +248,6 @@ public class Action {
         this.responsable = responsable;
     }
 
-    public LocalDate getCreation_date() {
-        return creation_date;
-    }
-
-    public void setCreation_date(LocalDate creation_date) {
-        this.creation_date = creation_date;
-    }
-
-    public LocalDate getLast_update() {
-        return last_update;
-    }
-
-    public void setLast_update(LocalDate last_update) {
-        this.last_update = last_update;
-    }
-
     public short[] getDependencies() {
         return dependencies;
     }
@@ -269,7 +255,20 @@ public class Action {
     public void setDependencies(short[] dependencies) {
         this.dependencies = dependencies;
     }
-    
-    
-    
+
+    public LocalDateTime getDate_created() {
+        return date_created;
+    }
+
+    protected void setDate_created(LocalDateTime date_created) {
+        this.date_created = date_created;
+    }
+
+    public LocalDateTime getDate_modified() {
+        return date_modified;
+    }
+
+    public void setDete_modified() {
+        this.date_modified = LocalDateTime.now();
+    }    
 }
