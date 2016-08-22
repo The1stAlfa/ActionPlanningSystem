@@ -11,5 +11,26 @@ package aps;
  */
 public class FuntionalArea {
     private String name;
-    
+    private String id;
+
+    public FuntionalArea(String name) {
+        this.name = name;
+        setId(name);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    private void setId(String name) {
+        this.id = "";
+    } 
 }

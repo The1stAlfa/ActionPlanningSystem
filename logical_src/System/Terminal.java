@@ -23,6 +23,7 @@ public class Terminal{
     private final Random _RANDOM;
     private final Scanner console;
     private final int LINE_JUMPS = 100;
+    private DataBase planB_DB;
     
     
     public Terminal() {
@@ -48,6 +49,7 @@ public class Terminal{
     public User getUser() {
         return _user;
     }
+    
     
     public User searchUser(String usrname){
         User temp_usr = new User();

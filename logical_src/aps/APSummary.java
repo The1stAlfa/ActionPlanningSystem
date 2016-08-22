@@ -10,76 +10,136 @@ package aps;
  * @author AI-Saac
  */
 public class APSummary {
-    private int t_actions;  // Total of Actions
-    private int t_actions_completed_app;  // app = As Per Plan
-    private int t_actions_completed;  //
-    private int t_actions_overdue;
-    private int t_near_due_date;
-    private int t_in_progress;
+    private int ta;  // Total of Actions
+    private int ta_C_APP;  // Completed app = As Per Plan
+    private int ta_C_AFTERAPP;  //
+    private int ta_OVERDUE;
+    private int ta_NEAR_DUE_DATE;
+    private int ta_IN_PROGRESS;
+    private int ta_CANCELLED;
 
+    /**
+     *
+     */
     public APSummary(){
-        
+        ta = 0;
+        ta_C_APP = 0;
+        ta_C_AFTERAPP = 0;
+        ta_OVERDUE = 0;
+        ta_NEAR_DUE_DATE = 0;
+        ta_IN_PROGRESS = 0;
+        ta_CANCELLED = 0;
     }
     
-    public APSummary(int t_actions, int t_actions_completed_app, 
-            int t_actions_completed, int t_actions_overdue, 
-            int t_near_due_date, int t_in_progress) {
-        
-        this.t_actions = t_actions;
-        this.t_actions_completed_app = t_actions_completed_app;
-        this.t_actions_completed = t_actions_completed;
-        this.t_actions_overdue = t_actions_overdue;
-        this.t_near_due_date = t_near_due_date;
-        this.t_in_progress = t_in_progress;
+    /**
+     *
+     * @return
+     */
+    public int getTA() {
+        return ta;
     }
 
-    public int getT_actions() {
-        return t_actions;
+    /**
+     *
+     * @param ta
+     */
+    public void setTA(int ta) {
+        this.ta = ta;
     }
 
-    public void setT_actions(int t_actions) {
-        this.t_actions = t_actions;
+    /**
+     *
+     * @return
+     */
+    public int getTA_C_APP() {
+        return ta_C_APP;
     }
 
-    public int getT_actions_completed_app() {
-        return t_actions_completed_app;
+    /**
+     *
+     * @param ta_C_APP
+     */
+    public void setTA_C_APP(int ta_C_APP) {
+        this.ta_C_APP = ta_C_APP;
     }
 
-    public void setT_actions_completed_app(int t_actions_completed_app) {
-        this.t_actions_completed_app = t_actions_completed_app;
+    /**
+     *
+     * @return
+     */
+    public int getTA_C_AFTERAPP() {
+        return ta_C_AFTERAPP;
     }
 
-    public int getT_actions_completed() {
-        return t_actions_completed;
+    /**
+     *
+     * @param ta_C_AFTERAPP
+     */
+    public void setTA_C_AFTERAPP(int ta_C_AFTERAPP) {
+        this.ta_C_AFTERAPP = ta_C_AFTERAPP;
     }
 
-    public void setT_actions_completed(int t_actions_completed) {
-        this.t_actions_completed = t_actions_completed;
+    /**
+     *
+     * @return
+     */
+    public int getTA_OVERDUE() {
+        return ta_OVERDUE;
     }
 
-    public int getT_actions_overdue() {
-        return t_actions_overdue;
+    /**
+     *
+     * @param ta_OVERDUE
+     */
+    public void setTA_OVERDUE(int ta_OVERDUE) {
+        this.ta_OVERDUE = ta_OVERDUE;
     }
 
-    public void setT_actions_overdue(int t_actions_overdue) {
-        this.t_actions_overdue = t_actions_overdue;
+    /**
+     *
+     * @return
+     */
+    public int getTA_NEAR_DUE_DATE() {
+        return ta_NEAR_DUE_DATE;
     }
 
-    public int getT_near_due_date() {
-        return t_near_due_date;
+    /**
+     *
+     * @param ta_NEAR_DUE_DATE
+     */
+    public void setTA_NEAR_DUE_DATE(int ta_NEAR_DUE_DATE) {
+        this.ta_NEAR_DUE_DATE = ta_NEAR_DUE_DATE;
     }
 
-    public void setT_near_due_date(int t_near_due_date) {
-        this.t_near_due_date = t_near_due_date;
+    /**
+     *
+     * @return
+     */
+    public int getTA_IN_PROGRESS() {
+        return ta_IN_PROGRESS;
     }
 
-    public int getT_in_progress() {
-        return t_in_progress;
+    /**
+     *
+     * @param ta_IN_PROGRESS
+     */
+    public void setTA_IN_PROGRESS(int ta_IN_PROGRESS) {
+        this.ta_IN_PROGRESS = ta_IN_PROGRESS;
     }
 
-    public void setT_in_progress(int t_in_progress) {
-        this.t_in_progress = t_in_progress;
+    /**
+     *
+     * @return
+     */
+    public int getTA_CANCELLED() {
+        return ta_CANCELLED;
     }
-    
-    
+
+    /**
+     *
+     * @param ta_CANCELLED
+     */
+    public void setTA_CANCELLED(int ta_CANCELLED) {
+        this.ta_CANCELLED = ta_CANCELLED;
+    }
 }

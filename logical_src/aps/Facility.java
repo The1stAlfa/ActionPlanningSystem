@@ -14,8 +14,11 @@ import java.util.ArrayList;
 public class Facility {
     //aps Class Variables 
     private ArrayList<Collaborator> collaborators_list;
+    private ArrayList<Meeting> meetings;
+    private ArrayList<FuntionalArea> funtional_areas;
     //************************************************************************
     private String name;
+    private String id;
     
     /** 
     * Class Empty constructor.
@@ -39,7 +42,20 @@ public class Facility {
     public void setCollaborators_list(ArrayList<Collaborator> collaborators_list) {
         this.collaborators_list = collaborators_list;
     }
+
+    public ArrayList<Meeting> getMeetings_list() {
+        return meetings;
+    }
+
+    public void setMeetings_list(ArrayList<Meeting> meetings_list) {
+        this.meetings = meetings_list;
+    }
     
+    public String getID(){
+        return this.id;
+    }
     
-    
+    private void setID(){
+        
+    }
 }

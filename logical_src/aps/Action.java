@@ -16,24 +16,28 @@ import java.util.ArrayList;
  */
 public class Action {
     //aps Class Variables 
+    private Collaborator responsable;
     private ArrayList<Task> tasks_list;
-    
+    private State state;
     //************************************************************************
     // Format of a customize Action Plan
     private String id;
     private short om_number;  // om = Operational Measure
     private String om_detail;
-    private Collaborator responsable;
     private String comments;
     private String benefit;
-    private String status;
     private LocalDate planned_start_date;  // Equals to APP = As Per Plan
     private LocalDate planned_finish_date;
     private LocalDate real_finish_date;
-    private short[] dependencies;  
     private LocalDateTime date_created;
     private LocalDateTime date_modified;
+    private String tracking_by;
+    private byte duration;
+    private byte pOc; //action percentage of completion
+    private byte day_to_dueDate;
+    private ArrayList<String> dependencies;  
     
+        
     /** 
     * Class Empty constructor.
     */
@@ -54,21 +58,18 @@ public class Action {
      * @param benefit
      * @param status
      */
-    public Action(String id, short om_number, String om_detail, 
+    public Action(String ap_name, short om_number, String om_detail, 
             Collaborator responsable, LocalDate planned_start_date, 
-            LocalDate planned_finish_date, LocalDate real_finish_date, 
-            String comments, String benefit, 
-            String status) {
-        this.id = id;
+            LocalDate planned_finish_date,String comments, String benefit) {
+        setID(ap_name);
         this.om_number = om_number;
         this.om_detail = om_detail;
         this.responsable = responsable;
         this.planned_start_date = planned_start_date;
         this.planned_finish_date = planned_finish_date;
-        this.real_finish_date = real_finish_date;
         this.comments = comments;
         this.benefit = benefit;
-        this.status = status;
+        setState();
         this.date_created = LocalDateTime.now();
     }
 
@@ -76,7 +77,7 @@ public class Action {
      *
      * @return
      */
-    public String getId() {
+    public String getID() {
         return id;
     }
 
@@ -84,8 +85,8 @@ public class Action {
      *
      * @param id
      */
-    public void setId(String id) {
-        this.id = id;
+    private void setID(String ap_name) {
+        this.id = ap_name;
     }
 
     /**
@@ -204,16 +205,16 @@ public class Action {
      *
      * @return
      */
-    public String getStatus() {
-        return status;
+    public State getState() {
+        return state;
     }
 
     /**
      *
      * @param status
      */
-    public void setStatus(String status) {
-        this.status = status;
+    public void setState() {
+        this.state = this.state.IN_PROCESS;
     }
 
     /**
@@ -248,12 +249,12 @@ public class Action {
         this.responsable = responsable;
     }
 
-    public short[] getDependencies() {
+    public ArrayList<String> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(short[] dependencies) {
-        this.dependencies = dependencies;
+    public void setDependencies() {
+        this.dependencies = null;
     }
 
     public LocalDateTime getDate_created() {
@@ -270,5 +271,37 @@ public class Action {
 
     public void setDete_modified() {
         this.date_modified = LocalDateTime.now();
-    }    
+    }
+
+    public String getTracking_by() {
+        return tracking_by;
+    }
+
+    public void setTracking_by(String tracking_by) {
+        this.tracking_by = tracking_by;
+    }
+
+    public byte getDuration() {
+        return duration;
+    }
+
+    public void setDuration(byte duration) {
+        this.duration = duration;
+    }
+
+    public byte getpOc() {
+        return pOc;
+    }
+
+    public void setpOc(byte pOc) {
+        this.pOc = pOc;
+    }
+
+    public byte getDay_to_dueDate() {
+        return day_to_dueDate;
+    }
+
+    public void setDay_to_dueDate(byte day_to_dueDate) {
+        this.day_to_dueDate = day_to_dueDate;
+    }
 }

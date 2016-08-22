@@ -5,19 +5,46 @@
  */
 package aps;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author AI-Saac
  */
 public class Organization {
-    private String name;
-    
+    //aps Class Variables 
+    private ArrayList<Facility> facilities;
+    //************************************************************************
+    private final String name = "Holcim";
+       
+    /**
+     *
+     */
     public Organization(){
-        
+        setFacilities();
     }
-    
-    public Organization(String name) {
-        this.name = name;
+
+    /**
+     *
+     * @return
+     */
+    public String getName() {
+        return name;
     }
-        
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<Facility> getFacilities() {
+        return facilities;
+    }
+
+    /**
+     *
+     * @param facilities
+     */
+    public void setFacilities() {
+        facilities = new ArrayList();
+    }
 }
