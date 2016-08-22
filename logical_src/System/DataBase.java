@@ -8,6 +8,7 @@ package System;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -62,20 +63,69 @@ public class DataBase {
     }
 
     protected ResultSet selectQuery(String query) throws SQLException{
-        Statement s = this.con.createStatement();
-        ResultSet rs = s.executeQuery(query); 
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try{
+            s = this.con.prepareStatement(query);
+            rs = s.executeQuery(query); 
+        }
+        catch(SQLException e){
+            
+        }
+        finally{
+            s.close();
+        }
         return rs;
     }
     
-    protected boolean insertQuery(){
-        return false;
+    protected int insertQuery(String query) throws SQLException{
+        PreparedStatement s = null;
+        int rows_affected = 0;
+        try{
+            s = this.con.prepareStatement(query);
+            rows_affected = s.executeUpdate();
+            return rows_affected;
+        }
+        catch(SQLException e){
+            
+        }
+        finally{
+            s.close();
+        }
+        return rows_affected;
     }
     
-    protected boolean updateQuery(){
-        return false;
+    protected int updateQuery(String query) throws SQLException{
+        PreparedStatement s = null;
+        int rows_affected = 0;
+        try{
+            s = this.con.prepareStatement(query);
+            rows_affected = s.executeUpdate();
+            return rows_affected;
+        }
+        catch(SQLException e){
+            
+        }
+        finally{
+            s.close();
+        }
+        return rows_affected;
     }
     
-    protected boolean deleteQuery(){
-        return false;
+    protected int deleteQuery(String query) throws SQLException{
+        PreparedStatement s = null;
+        int rows_affected = 0;
+        try{
+            s = this.con.prepareStatement(query);
+            rows_affected = s.executeUpdate();
+            return rows_affected;
+        }
+        catch(SQLException e){
+            
+        }
+        finally{
+            s.close();
+        }
+        return rows_affected;
     }
 }
