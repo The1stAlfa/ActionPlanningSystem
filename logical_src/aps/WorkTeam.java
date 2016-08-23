@@ -16,7 +16,7 @@ public class WorkTeam {
     private ArrayList<Collaborator> members;
     private ArrayList<ActionPlan> plansID_list;
     //************************************************************************
-    private String id;
+    private short id;
     private byte performance; // Team APP Percentage of performance
     
     /**
@@ -32,25 +32,9 @@ public class WorkTeam {
      * @param plansID_list
      */
     public WorkTeam(ArrayList<Collaborator> members, ArrayList<ActionPlan> plansID_list) {
-        setID("122");
+        setId((short)2);
         this.members = members;
         this.plansID_list = plansID_list;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getID() {
-        return id;
-    }
-
-    /**
-     *
-     * @param id
-     */
-    private void setID(String id) {
-        this.id = id;
     }
 
     /**
@@ -63,14 +47,6 @@ public class WorkTeam {
 
     /**
      *
-     * @param members
-     */
-    public void setMembers(ArrayList<Collaborator> members) {
-        this.members = members;
-    }
-
-    /**
-     *
      * @return
      */
     public ArrayList<ActionPlan> getPlansID_list() {
@@ -79,10 +55,10 @@ public class WorkTeam {
 
     /**
      *
-     * @param plansID_list
+     * @return
      */
-    public void setPlansID_list(ArrayList<ActionPlan> plansID_list) {
-        this.plansID_list = plansID_list;
+    public short getId() {
+        return id;
     }
 
     /**
@@ -95,9 +71,34 @@ public class WorkTeam {
 
     /**
      *
+     * @param members
+     */
+    public void setMembers(ArrayList<Collaborator> members) {
+        this.members = members;
+    }
+
+    /**
+     *
+     * @param plansID_list
+     */
+    public void setPlansID_list(ArrayList<ActionPlan> plansID_list) {
+        this.plansID_list = plansID_list;
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void setId(short id) {
+        this.id = id;
+    }
+
+    /**
+     *
      * @param performance
      */
     public void setPerformance(byte performance) {
         this.performance = performance;
     }
+
 }
