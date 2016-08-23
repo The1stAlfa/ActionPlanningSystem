@@ -21,13 +21,13 @@ public class Meeting {
     private String name;
     private String purpose;
     private LocalDate date_created;
-    private String acronym;
+    private String id;
     
     /** 
     * Class Empty constructor.
     */
     public Meeting(String name){
-        setAcronym(name);
+        setId(name);
     }
     
     public Meeting(String name, String purpose, String id,
@@ -41,55 +41,57 @@ public class Meeting {
         return adt_participants;
     }
 
-    public WorkTeam getTeam() {
-        return team;
-    }
-    
-    public ActionPlan getPlan() {
-        return plan;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public String getPurpose() {
-        return purpose;
-    }
-    
-    public LocalDate getDate_created() {
-        return date_created;
-    }
-
-    public String getAcronym() {
-        return acronym;
-    }
-    
     public void setAdt_participants(ArrayList<Collaborator> adt_participants) {
         this.adt_participants = adt_participants;
+    }
+
+    public WorkTeam getTeam() {
+        return team;
     }
 
     public void setTeam(WorkTeam team) {
         this.team = team;
     }
 
+    public ActionPlan getPlan() {
+        return plan;
+    }
+
     public void setPlan(ActionPlan plan) {
         this.plan = plan;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getPurpose() {
+        return purpose;
+    }
+
     public void setPurpose(String purpose) {
         this.purpose = purpose;
+    }
+
+    public LocalDate getDate_created() {
+        return date_created;
     }
 
     public void setDate_created(LocalDate date_created) {
         this.date_created = date_created;
     }
 
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
+    public String getId() {
+        return id;
     }
+
+    private void setId(String name) {
+        this.id = "";
+    }
+    
+    
 }

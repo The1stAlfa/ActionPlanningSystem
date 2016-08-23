@@ -11,26 +11,26 @@ package aps;
  */
 public class FuntionalArea {
     private String name;
-    private String acronym;
+    private String id;
 
     public FuntionalArea(String name) {
         this.name = name;
-        setAcronym(name);
+        setId(name);
     }
 
     public String getName() {
         return name;
     }
 
-    public String getAcronym() {
-        return acronym;
-    }
-    
     public void setName(String name) {
         this.name = name;
     }
-    
-    private void setAcronym(String name) {
-        this.acronym = "";
+
+    public String getId() {
+        return id;
     }
+
+    private void setId(String name) {
+        this.id = "";
+    } 
 }

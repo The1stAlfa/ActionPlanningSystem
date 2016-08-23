@@ -16,7 +16,7 @@ public class WorkTeam {
     private ArrayList<Collaborator> members;
     private ArrayList<ActionPlan> plansID_list;
     //************************************************************************
-    private short id;
+    private String id;
     private byte performance; // Team APP Percentage of performance
     
     /**
@@ -32,9 +32,25 @@ public class WorkTeam {
      * @param plansID_list
      */
     public WorkTeam(ArrayList<Collaborator> members, ArrayList<ActionPlan> plansID_list) {
-        setId((short)2);
+        setID("122");
         this.members = members;
         this.plansID_list = plansID_list;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getID() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     */
+    private void setID(String id) {
+        this.id = id;
     }
 
     /**
@@ -47,34 +63,18 @@ public class WorkTeam {
 
     /**
      *
-     * @return
-     */
-    public ArrayList<ActionPlan> getPlansID_list() {
-        return plansID_list;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public short getId() {
-        return id;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public byte getPerformance() {
-        return performance;
-    }
-
-    /**
-     *
      * @param members
      */
     public void setMembers(ArrayList<Collaborator> members) {
         this.members = members;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<ActionPlan> getPlansID_list() {
+        return plansID_list;
     }
 
     /**
@@ -87,10 +87,10 @@ public class WorkTeam {
 
     /**
      *
-     * @param id
+     * @return
      */
-    public void setId(short id) {
-        this.id = id;
+    public byte getPerformance() {
+        return performance;
     }
 
     /**
@@ -100,5 +100,4 @@ public class WorkTeam {
     public void setPerformance(byte performance) {
         this.performance = performance;
     }
-
 }

@@ -19,7 +19,7 @@ public class ActionPlan {
     private Collaborator owner;
     private ArrayList<Action> actions_list;       
    //************************************************************************ 
-    private String ap_id;
+    private String id;
     private LocalDate date_created;
     private LocalDate date_modified;
     private LocalDateTime current_date;
@@ -34,21 +34,33 @@ public class ActionPlan {
 
     /**
      *
-     * @param ap_id
+     * @param id
      * @param owner
      */
     public ActionPlan(Collaborator owner, String meetingID) {
-        setAp_id(meetingID);
+        setID(meetingID);
         this.owner = owner;
         this.date_created = LocalDate.now();
         this.summary = summary;
         actions_list = null;
     }
 
-    public APSummary getSummary() {
-        return summary;
+    /**
+     *
+     * @return
+     */
+    public String getId() {
+        return id;
     }
-    
+
+    /**
+     *
+     * @param id
+     */
+    private void setID(String id) {
+        this.id = id;
+    }
+
     /**
      *
      * @return
@@ -57,58 +69,106 @@ public class ActionPlan {
         return owner;
     }
 
-    public ArrayList<Action> getActions_list() {
-        return actions_list;
-    }
-
-    public String getAp_id() {
-        return ap_id;
-    }
-
-    public LocalDate getDate_created() {
-        return date_created;
-    }
-
-    public LocalDate getDate_modified() {
-        return date_modified;
-    }
-    
-    public byte getExecution() {
-        return execution;
-    }
-
-    public LocalDateTime getCurrent_date() {
-        return current_date;
-    }
-
-    public void setSummary(APSummary summary) {
-        this.summary = summary;
-    }
-
+    /**
+     *
+     * @param owner
+     */
     public void setOwner(Collaborator owner) {
         this.owner = owner;
     }
 
+    /**
+     *
+     * @return
+     */
+    public LocalDate getDate_modified() {
+        return date_modified;
+    }
+
+    /**
+     *
+     * @param date_modified
+     */
+    public void setLast_update(LocalDate date_modified) {
+        this.date_modified = date_modified;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public APSummary getSummary() {
+        return summary;
+    }
+
+    /**
+     *
+     * @param summary
+     */
+    public void setSummary(APSummary summary) {
+        this.summary = summary;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<Action> getActions_list() {
+        return actions_list;
+    }
+
+    /**
+     *
+     * @param actions_list
+     */
     public void setActions_list(ArrayList<Action> actions_list) {
         this.actions_list = actions_list;
     }
 
-    public void setAp_id(String ap_id) {
-        this.ap_id = ap_id;
+    /**
+     *
+     * @return
+     */
+    public LocalDate getDate_created() {
+        return date_created;
     }
 
+    /**
+     *
+     * @param date_created
+     */
     public void setDate_created(LocalDate date_created) {
         this.date_created = date_created;
     }
 
-    public void setDate_modified(LocalDate date_modified) {
-        this.date_modified = date_modified;
+    /**
+     *
+     * @return
+     */
+    public LocalDateTime getCurrent_date() {
+        return current_date;
     }
 
+    /**
+     *
+     * @param current_date
+     */
     public void setCurrent_date(LocalDateTime current_date) {
         this.current_date = current_date;
     }
 
+    /**
+     *
+     * @return
+     */
+    public byte getExecution() {
+        return execution;
+    }
+
+    /**
+     *
+     * @param execution
+     */
     public void setExecution(byte execution) {
         this.execution = execution;
     }
