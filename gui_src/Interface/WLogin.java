@@ -33,16 +33,16 @@ import javax.swing.JTextField;
  * @author LoboAlfa2.0
  */
 public class WLogin extends JFrame{
-    private final Dimension nativeScreenSize;
+    //private final Dimension nativeScreenSize;
     private int xPosition=0, yPosition=0;
     private JLabel goOnLabel,checkLabel ;
-    private JTextField usernameTF;
-    private final JPasswordField passwordTF;
-    private final JPanel mainPanel;
-    private final String resource;
-    
+    private JTextField usernameTF;}
+    //private final JPasswordField passwordTF;
+   // private final JPanel mainPanel;
+    //private final String resource;
+    /*
     public WLogin(){
-        super("System Access");
+       /* super("System Access");
         resource = new String("resources/images/");
         this.setUndecorated(true);
         this.setVisible(true);
@@ -86,7 +86,7 @@ public class WLogin extends JFrame{
         
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setForeground(Color.WHITE);
-        
+        /*
         passwordTF = new JPasswordField();
         passwordTF.addKeyListener(new KeyListener(){
             public void keyPressed(KeyEvent e){
@@ -167,14 +167,14 @@ public class WLogin extends JFrame{
         this.getContentPane().add(checkLabel);
         wlExitLabel.setBounds(this.getWidth()-22,0,24,24);
         goOnLabel.setBounds(this.getWidth()-37,this.getHeight()-74,32,32);
-        checkLabel.setBounds(this.getWidth()-37,this.getHeight()-124,32,32);
-    }
+        checkLabel.setBounds(this.getWidth()-37,this.getHeight()-124,32,32);*/
     
+  /*
     private void initSystem(User user){
         this.dispose();
         APSys.deploySystem(user);
     }
-    
+ 
     private void validateDataInput(){
         if(!(usernameTF.getText().isEmpty())){
                         if(!(String.valueOf(passwordTF.getPassword()).isEmpty())){
@@ -202,5 +202,4 @@ public class WLogin extends JFrame{
                         }
                         JOptionPane.showMessageDialog(usernameTF,"Data Input Invalid. Username is Empty.","Error",JOptionPane.ERROR_MESSAGE);
                     }
-    }
-}
+    }*/

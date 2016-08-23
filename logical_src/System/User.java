@@ -12,28 +12,23 @@ import java.util.ArrayList;
  * @author AI-Saac
  */
 public class User {
-    private int id;
-    private String username;
-    private String password;
+    private String username = null;
+    private String password = null;
     private String role;
     private ArrayList<String> access_list;
     private byte employee_id;
     
     public User() {
-        this.id = 0;
+    
     }
   
-    public User(int id, String username, String password, String role, ArrayList<String> access_list, byte employee_id) {
-        this.id = id;
+    public User(String username, String password, String role, 
+            ArrayList<String> access_list, byte employee_id) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.access_list = access_list;
         this.employee_id = employee_id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setUsername(String username) {
@@ -54,10 +49,6 @@ public class User {
 
     public void setEmployee_id(byte employee_id) {
         this.employee_id = employee_id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getUsername() {

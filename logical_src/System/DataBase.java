@@ -23,7 +23,7 @@ public class DataBase {
     private static final String DBMS = "mysql";
     private static final String HOST = "127.0.0.1";
     private static final String PORT = "3306";
-    private static final String DATABASE = "base_java";
+    private static final String DATABASE = "planb";
     private static final String USER = "root";
     private static final String PASSWORD = "";
     
@@ -41,7 +41,7 @@ public class DataBase {
         try{
             this.con = DriverManager.getConnection("jdbc:" + DBMS + "://" 
                     + HOST + ":" + PORT + "/" + DATABASE, USER, PASSWORD);                                
-            //System.out.println("CONEXION EXITOSA CON LA BASE DE DATOS");
+            System.out.println("CONEXION EXITOSA CON LA BASE DE DATOS");
             return true;
         }
         catch(SQLException exception){

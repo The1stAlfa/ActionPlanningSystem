@@ -26,12 +26,14 @@ public class Terminal{
     private DataBase planB_DB;
     
     
-    public Terminal() {
+    public Terminal() throws Exception {
         _RANDOM = new Random();
         this.id = (byte)_RANDOM.nextInt();
         if(this.id<0)
             id = (byte)(id *(-1));
         this.console = new Scanner(System.in);
+        planB_DB = new DataBase();
+        boolean j = planB_DB.connection();
     }
 
     public void setUser(User _user) {
@@ -50,7 +52,7 @@ public class Terminal{
         return _user;
     }
     
-    
+    /*
     public User searchUser(String usrname){
         User temp_usr = new User();
         FileReader usrDB;
@@ -106,7 +108,7 @@ public class Terminal{
 		}
         return temp_usr;
     }
-    
+    */
     public ArrayList<String> defineAccessList(String accesses){
         ArrayList<String> _list = new ArrayList();
 	char comparator = '-';
@@ -121,7 +123,7 @@ public class Terminal{
 		
                 return _list;
     }
-    
+   /* 
     public boolean authenticate(String usrname, String pswd){
         
         _user = searchUser(usrname);        
@@ -134,5 +136,5 @@ public class Terminal{
         System.out.println("system Login incorrect");
         return false;
         
-    }
+    }*/
 }

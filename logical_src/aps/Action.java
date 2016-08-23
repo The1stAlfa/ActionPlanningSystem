@@ -11,17 +11,15 @@ import java.util.ArrayList;
  * an Action Item of an Action Plan.
  * 
  * @author AI-Saac
- * @param tasks_list
- * @param dependencies List of action items which restrict the start-up or finishing of the action execution.
  */
 public class Action {
     //aps Class Variables 
-    private Collaborator responsable;
+    private Collaborator responsible;
     private ArrayList<Task> tasks_list;
     private State state;
     //************************************************************************
     // Format of a customize Action Plan
-    private String id;
+    private String itemID;
     private short om_number;  // om = Operational Measure
     private String om_detail;
     private String comments;
@@ -47,16 +45,14 @@ public class Action {
     
     /**
      *
-     * @param id
+     * @param ap_name
      * @param om_number
      * @param om_detail
      * @param responsable
      * @param planned_start_date
      * @param planned_finish_date
-     * @param real_finish_date
      * @param comments
      * @param benefit
-     * @param status
      */
     public Action(String ap_name, short om_number, String om_detail, 
             Collaborator responsable, LocalDate planned_start_date, 
@@ -64,7 +60,7 @@ public class Action {
         setID(ap_name);
         this.om_number = om_number;
         this.om_detail = om_detail;
-        this.responsable = responsable;
+        this.responsible = responsable;
         this.planned_start_date = planned_start_date;
         this.planned_finish_date = planned_finish_date;
         this.comments = comments;
@@ -72,23 +68,39 @@ public class Action {
         setState();
         this.date_created = LocalDateTime.now();
     }
-
+     
+    /**
+     *
+     * @return
+     */
+    public Collaborator getResponsible() {
+        return responsible;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public ArrayList<Task> getTasks_list() {
+        return tasks_list;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public State getState() {
+        return state;
+    }
+    
     /**
      *
      * @return
      */
     public String getID() {
-        return id;
+        return itemID;
     }
-
-    /**
-     *
-     * @param id
-     */
-    private void setID(String ap_name) {
-        this.id = ap_name;
-    }
-
+    
     /**
      *
      * @return
@@ -96,7 +108,142 @@ public class Action {
     public short getOm_number() {
         return om_number;
     }
-
+    
+    /**
+     *
+     * @return
+     */
+    public String getOm_detail() {
+        return om_detail;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getComments() {
+        return comments;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getBenefit() {
+        return benefit;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public LocalDate getPlanned_start_date() {
+        return planned_start_date;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public LocalDate getPlanned_finish_date() {
+        return planned_finish_date;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public LocalDate getReal_finish_date() {
+        return real_finish_date;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public LocalDateTime getDate_created() {
+        return date_created;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public LocalDateTime getDate_modified() {
+        return date_modified;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getTracking_by() {
+        return tracking_by;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public byte getDuration() {
+        return duration;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public byte getpOc() {
+        return pOc;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public byte getDay_to_dueDate() {
+        return day_to_dueDate;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public ArrayList<String> getDependencies() {
+        return dependencies;
+    }
+    
+    /**
+     *
+     * @param responsible
+     */
+    public void setResponsible(Collaborator responsible) {
+        this.responsible = responsible;
+    }
+    
+    /**
+     *
+     * @param tasks_list
+     */
+    public void setTasks_list(ArrayList<Task> tasks_list) {
+        this.tasks_list = tasks_list;
+    }
+    
+    /**
+     *
+     */
+    public void setState() {
+        this.state = this.state.IN_PROCESS;
+    }
+    
+    /**
+     *
+     * @param id
+     */
+    private void setID(String ap_name) {
+        this.itemID = ap_name;
+    }
+    
     /**
      *
      * @param om_number
@@ -107,44 +254,28 @@ public class Action {
 
     /**
      *
-     * @return
-     */
-    public String getOm_detail() {
-        return om_detail;
-    }
-
-    /**
-     *
      * @param om_detail
      */
     public void setOm_detail(String om_detail) {
         this.om_detail = om_detail;
     }
-
+    
     /**
      *
-     * @return
+     * @param comments
      */
-    public Collaborator getOwner() {
-        return responsable;
-    }
-
+    public void setComments(String comments) {
+        this.comments = comments;
+    }  
+    
     /**
      *
-     * @param responsable
+     * @param benefit
      */
-    public void setOwner(Collaborator responsable) {
-        this.responsable = responsable;
+    public void setBenefit(String benefit) {
+        this.benefit = benefit;
     }
-
-    /**
-     *
-     * @return
-     */
-    public LocalDate getPlanned_start_date() {
-        return planned_start_date;
-    }
-
+    
     /**
      *
      * @param planned_start_date
@@ -152,15 +283,7 @@ public class Action {
     public void setPlanned_start_date(LocalDate planned_start_date) {
         this.planned_start_date = planned_start_date;
     }
-
-    /**
-     *
-     * @return
-     */
-    public LocalDate getPlanned_finish_date() {
-        return planned_finish_date;
-    }
-
+    
     /**
      *
      * @param planned_finish_date
@@ -168,15 +291,7 @@ public class Action {
     public void setPlanned_finish_date(LocalDate planned_finish_date) {
         this.planned_finish_date = planned_finish_date;
     }
-
-    /**
-     *
-     * @return
-     */
-    public LocalDate getReal_finish_date() {
-        return real_finish_date;
-    }
-
+   
     /**
      *
      * @param real_finish_date
@@ -187,121 +302,55 @@ public class Action {
 
     /**
      *
-     * @return
+     * @param date_created
      */
-    public String getComments() {
-        return comments;
-    }
-
-    /**
-     *
-     * @param comments
-     */
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public State getState() {
-        return state;
-    }
-
-    /**
-     *
-     * @param status
-     */
-    public void setState() {
-        this.state = this.state.IN_PROCESS;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getBenefit() {
-        return benefit;
-    }
-
-    /**
-     *
-     * @param benefit
-     */
-    public void setBenefit(String benefit) {
-        this.benefit = benefit;
-    }
-
-    public ArrayList<Task> getTasks_list() {
-        return tasks_list;
-    }
-
-    public void setTasks_list(ArrayList<Task> tasks_list) {
-        this.tasks_list = tasks_list;
-    }
-
-    public Collaborator getResponsable() {
-        return responsable;
-    }
-
-    public void setResponsable(Collaborator responsable) {
-        this.responsable = responsable;
-    }
-
-    public ArrayList<String> getDependencies() {
-        return dependencies;
-    }
-
-    public void setDependencies() {
-        this.dependencies = null;
-    }
-
-    public LocalDateTime getDate_created() {
-        return date_created;
-    }
-
     protected void setDate_created(LocalDateTime date_created) {
         this.date_created = date_created;
     }
-
-    public LocalDateTime getDate_modified() {
-        return date_modified;
-    }
-
-    public void setDete_modified() {
+    
+    /**
+     *
+     */
+    public void setDate_modified() {
         this.date_modified = LocalDateTime.now();
     }
-
-    public String getTracking_by() {
-        return tracking_by;
-    }
-
+    
+    /**
+     *
+     * @param tracking_by
+     */
     public void setTracking_by(String tracking_by) {
         this.tracking_by = tracking_by;
     }
-
-    public byte getDuration() {
-        return duration;
-    }
-
+   
+    /**
+     *
+     * @param duration
+     */
     public void setDuration(byte duration) {
         this.duration = duration;
     }
-
-    public byte getpOc() {
-        return pOc;
-    }
-
+    
+    /**
+     *
+     * @param pOc
+     */
     public void setpOc(byte pOc) {
         this.pOc = pOc;
     }
-
-    public byte getDay_to_dueDate() {
-        return day_to_dueDate;
-    }
-
+ 
+    /**
+     *
+     * @param day_to_dueDate
+     */
     public void setDay_to_dueDate(byte day_to_dueDate) {
         this.day_to_dueDate = day_to_dueDate;
+    }
+    
+    /**
+     *
+     */
+    public void setDependencies() {
+        this.dependencies = null;
     }
 }

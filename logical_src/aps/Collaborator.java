@@ -42,42 +42,58 @@ public class Collaborator {
         this.firstName = firstName;
         this.lastName = lastName;
         this.charge = charge;
-        setAcronymName();
+        setAcronym_name();
     }
 
+    public FuntionalArea getF_area() {
+        return f_area;
+    }
+    
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLastNames() {
+    public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getCharge() {
         return charge;
     }
 
+    public void setF_area(FuntionalArea f_area) {
+        this.f_area = f_area;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
     public void setCharge(String charge) {
         this.charge = charge;
     }
     
-    private void setAcronymName(){
+    private void setAcronym_name(){
         acronym_name = firstName.substring(0,1);
         String[] names = lastName.split(" ");
         for(String name:names)

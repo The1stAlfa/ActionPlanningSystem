@@ -30,8 +30,10 @@ public class APSys {
      */
     @SuppressWarnings("Convert2Lambda")
     public static void main(String[] args) throws InterruptedException, 
-            InvocationTargetException {
+            InvocationTargetException,
+            Exception {
         APSys.terminalGUI_APSys = new TerminalGUI();
+        terminal_APSys = new Terminal();
         try {
             Thread.sleep(1500);
 	} catch (InterruptedException e) {
