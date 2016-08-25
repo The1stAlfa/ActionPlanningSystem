@@ -20,7 +20,7 @@ public class APSys {
     /**
      *
      */
-    public static Organization holcim = new Organization();
+    public static Organization org = new Organization();
     private static Terminal terminal_APSys;
     private static TerminalGUI terminalGUI_APSys;
     /**

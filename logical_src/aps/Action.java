@@ -1,6 +1,3 @@
-/*
- * 
- */
 package aps;
 import java.time.LocalDate;  
 import java.time.LocalDateTime;
@@ -35,12 +32,15 @@ public class Action {
     private byte day_to_dueDate;
     private ArrayList<String> dependencies;  
     
+    public Action(){
         
+    }
+    
     /** 
     * Class Empty constructor.
     */
-    public Action(){
-        
+    public Action(String met, short inc, byte length){
+        setID(met, inc, length);
     }
     
     /**
@@ -54,10 +54,10 @@ public class Action {
      * @param comments
      * @param benefit
      */
-    public Action(String ap_name, short om_number, String om_detail, 
+    public Action(String meeting_acronym, short om_number, String om_detail, 
             Collaborator responsable, LocalDate planned_start_date, 
             LocalDate planned_finish_date,String comments, String benefit) {
-        setID(ap_name);
+        setID(meeting_acronym, om_number, (byte)3);
         this.om_number = om_number;
         this.om_detail = om_detail;
         this.responsible = responsable;
@@ -238,10 +238,12 @@ public class Action {
     
     /**
      *
-     * @param id
+     * @param meeting_name
+     * @param fa_name
      */
-    private void setID(String ap_name) {
-        this.itemID = ap_name;
+    public void setID(String meeting_name, short inc, byte id_length) {
+        itemID = String.format("%s%0" + id_length + "d", meeting_name,
+                (int)inc + 1);
     }
     
     /**
@@ -353,4 +355,5 @@ public class Action {
     public void setDependencies() {
         this.dependencies = null;
     }
+
 }

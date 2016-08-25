@@ -28,17 +28,17 @@ public class Organization {
      *
      * @return
      */
-    public String getName() {
-        return name;
+    public ArrayList<Facility> getFacilities() {
+        return facilities;
     }
-
+    
     /**
      *
      * @return
      */
-    public ArrayList<Facility> getFacilities() {
-        return facilities;
-    }
+    public String getName() {
+        return name;
+    }   
 
     /**
      *

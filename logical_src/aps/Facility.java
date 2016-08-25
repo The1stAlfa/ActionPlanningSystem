@@ -14,11 +14,12 @@ import java.util.ArrayList;
 public class Facility {
     //aps Class Variables 
     private ArrayList<Collaborator> collaborators_list;
-    private ArrayList<Meeting> meetings;
     private ArrayList<FuntionalArea> funtional_areas;
+    private ArrayList<Meeting> meetings;
     //************************************************************************
+    private byte id;
     private String name;
-    private String id;
+    private String acronym;
     
     /** 
     * Class Empty constructor.
@@ -26,36 +27,52 @@ public class Facility {
     public Facility(){
         
     }
-    
+
+    public ArrayList<Collaborator> getCollaborators_list() {
+        return collaborators_list;
+    }
+
+    public ArrayList<FuntionalArea> getFuntional_areas() {
+        return funtional_areas;
+    }
+
+    public ArrayList<Meeting> getMeetings() {
+        return meetings;
+    }
+
+    public byte getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ArrayList<Collaborator> getCollaborators_list() {
-        return collaborators_list;
+    public String getAcronym() {
+        return acronym;
     }
 
     public void setCollaborators_list(ArrayList<Collaborator> collaborators_list) {
         this.collaborators_list = collaborators_list;
     }
 
-    public ArrayList<Meeting> getMeetings_list() {
-        return meetings;
+    public void setFuntional_areas(ArrayList<FuntionalArea> funtional_areas) {
+        this.funtional_areas = funtional_areas;
     }
 
-    public void setMeetings_list(ArrayList<Meeting> meetings_list) {
-        this.meetings = meetings_list;
+    public void setMeetings(ArrayList<Meeting> meetings) {
+        this.meetings = meetings;
     }
-    
-    public String getID(){
-        return this.id;
+
+    public void setId(byte id) {
+        this.id = id;
     }
-    
-    private void setID(){
-        
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAcronym(String acronym) {
+        this.acronym = acronym;
     }
 }

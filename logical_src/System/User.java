@@ -16,19 +16,17 @@ public class User {
     private String password = null;
     private String role;
     private ArrayList<String> access_list;
-    private byte employee_id;
     
     public User() {
     
     }
   
     public User(String username, String password, String role, 
-            ArrayList<String> access_list, byte employee_id) {
+            ArrayList<String> access_list) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.access_list = access_list;
-        this.employee_id = employee_id;
     }
 
     public void setUsername(String username) {
@@ -47,10 +45,6 @@ public class User {
         this.access_list = access_list;
     }
 
-    public void setEmployee_id(byte employee_id) {
-        this.employee_id = employee_id;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -65,9 +59,5 @@ public class User {
 
     public ArrayList<String> getAccess_list() {
         return access_list;
-    }
-
-    public byte getEmployee_id() {
-        return employee_id;
     }
 }

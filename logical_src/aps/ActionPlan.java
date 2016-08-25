@@ -7,7 +7,7 @@ package aps;
 
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Optional;
 
 /**
  *
@@ -19,168 +19,126 @@ public class ActionPlan {
     private Collaborator owner;
     private ArrayList<Action> actions_list;       
    //************************************************************************ 
-    private String id;
-    private LocalDate date_created;
-    private LocalDate date_modified;
+    private short id;
+    private LocalDateTime date_created;
+    private LocalDateTime date_modified;
     private LocalDateTime current_date;
     private byte execution; // Action Plan porcentage of execution
+    private short action_increment;
+    private byte id_length;
     
     /**
      *
      */
     public ActionPlan(){
-        
+        this.actions_list = new ArrayList<>();
     }
 
     /**
      *
-     * @param id
+     * @param meetingid
      * @param owner
      */
-    public ActionPlan(Collaborator owner, String meetingID) {
-        setID(meetingID);
+    public ActionPlan(Collaborator owner, short id) {
+        this.id = id;
         this.owner = owner;
-        this.date_created = LocalDate.now();
+        this.date_created = LocalDateTime.now();
         this.summary = summary;
         actions_list = null;
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     *
-     * @param id
-     */
-    private void setID(String id) {
-        this.id = id;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Collaborator getOwner() {
-        return owner;
-    }
-
-    /**
-     *
-     * @param owner
-     */
-    public void setOwner(Collaborator owner) {
-        this.owner = owner;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public LocalDate getDate_modified() {
-        return date_modified;
-    }
-
-    /**
-     *
-     * @param date_modified
-     */
-    public void setLast_update(LocalDate date_modified) {
-        this.date_modified = date_modified;
-    }
-
-    /**
-     *
-     * @return
-     */
     public APSummary getSummary() {
         return summary;
     }
 
-    /**
-     *
-     * @param summary
-     */
-    public void setSummary(APSummary summary) {
-        this.summary = summary;
+    public Collaborator getOwner() {
+        return owner;
     }
 
-    /**
-     *
-     * @return
-     */
     public ArrayList<Action> getActions_list() {
         return actions_list;
     }
 
-    /**
-     *
-     * @param actions_list
-     */
-    public void setActions_list(ArrayList<Action> actions_list) {
-        this.actions_list = actions_list;
+    public short getId() {
+        return id;
     }
 
-    /**
-     *
-     * @return
-     */
-    public LocalDate getDate_created() {
+    public LocalDateTime getDate_created() {
         return date_created;
     }
 
-    /**
-     *
-     * @param date_created
-     */
-    public void setDate_created(LocalDate date_created) {
-        this.date_created = date_created;
+    public LocalDateTime getDate_modified() {
+        return date_modified;
     }
 
-    /**
-     *
-     * @return
-     */
     public LocalDateTime getCurrent_date() {
         return current_date;
     }
 
-    /**
-     *
-     * @param current_date
-     */
-    public void setCurrent_date(LocalDateTime current_date) {
-        this.current_date = current_date;
-    }
-
-    /**
-     *
-     * @return
-     */
     public byte getExecution() {
         return execution;
     }
 
-    /**
-     *
-     * @param execution
-     */
-    public void setExecution(byte execution) {
-        this.execution = execution;
+    public short getAction_increment() {
+        return action_increment;
     }
     
-    public ArrayList<Action> searchActionItems(ActionItemFilter filter, 
-            String key){
-        String query;
-        if(filter.equals(ActionItemFilter.BY_ID)){
-            query = "SELECT * FROM ACTION WHERE ITEM_ID='555'";
-            
-        }
-        return null;
+    public byte getId_length() {
+        return id_length;
+    }
+    
+    public void setSummary(APSummary summary) {
+        this.summary = summary;
+    }
+        
+    public void setOwner(Collaborator owner) {
+        this.owner = owner;
+    }
+
+    public void setActions_list(ArrayList<Action> actions_list) {
+        this.actions_list = actions_list;
+    }
+
+    public void setId(short id) {
+        this.id = id;
+    }
+
+    public void setDate_created(LocalDateTime date_created) {
+        this.date_created = date_created;
+    }
+
+    public void setDate_modified(LocalDateTime date_modified) {
+        this.date_modified = date_modified;
+    }
+
+    public void setCurrent_date(LocalDateTime current_date) {
+        this.current_date = current_date;
+    }
+
+    public void setExecution(byte execution) {
+        this.execution = execution;
+    }    
+
+    public void setAction_increment(short action_increment) {
+        this.action_increment = action_increment;
+    }
+    
+    public void setId_length(byte id_length) {
+        this.id_length = id_length;
+    }
+    
+    public Action searchActionItem(String key){
+        Optional<Action> a = actions_list.stream()
+        .filter(p -> p.getID().equals(key))
+        .findFirst();
+        return a.isPresent() ? a.get() : null;
+        //return null;
+    }
+    
+    public boolean insertActionItem(Action action){
+        actions_list.add(action);
+        action_increment += (short) 1;
+        return true;
     }
     
     //Overload Method

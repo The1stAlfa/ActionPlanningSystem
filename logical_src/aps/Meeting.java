@@ -6,7 +6,9 @@
 package aps;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,79 +21,158 @@ public class Meeting {
     private ActionPlan plan;
  //************************************************************************
     private String name;
+    private String acronym;
     private String purpose;
     private LocalDate date_created;
-    private String id;
+    private LocalDateTime date_modified;
     
     /** 
     * Class Empty constructor.
+     * @param name
     */
     public Meeting(String name){
-        setId(name);
+        setAcronym(name);
     }
     
+    /**
+     *
+     * @param name
+     * @param purpose
+     * @param id
+     * @param date_created
+     */
     public Meeting(String name, String purpose, String id,
             LocalDate date_created){
         this.name = name;
         this.purpose = purpose;
         
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public ArrayList<Collaborator> getAdt_participants() {
         return adt_participants;
     }
 
-    public void setAdt_participants(ArrayList<Collaborator> adt_participants) {
-        this.adt_participants = adt_participants;
-    }
-
+    /**
+     *
+     * @return
+     */
     public WorkTeam getTeam() {
         return team;
     }
 
-    public void setTeam(WorkTeam team) {
-        this.team = team;
-    }
-
+    /**
+     *
+     * @return
+     */
     public ActionPlan getPlan() {
         return plan;
     }
 
-    public void setPlan(ActionPlan plan) {
-        this.plan = plan;
-    }
-
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     *
+     * @return
+     */
+    public String getAcronym() {
+        return acronym;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(String purpose) {
-        this.purpose = purpose;
-    }
-
+    /**
+     *
+     * @return
+     */
     public LocalDate getDate_created() {
         return date_created;
     }
 
+    /**
+     *
+     * @return
+     */
+    public LocalDateTime getDate_modified() {
+        return date_modified;
+    }
+
+    /**
+     *
+     * @param adt_participants
+     */
+    public void setAdt_participants(ArrayList<Collaborator> adt_participants) {
+        this.adt_participants = adt_participants;
+    }
+
+    /**
+     *
+     * @param team
+     */
+    public void setTeam(WorkTeam team) {
+        this.team = team;
+    }
+
+    /**
+     *
+     * @param plan
+     */
+    public void setPlan(ActionPlan plan) {
+        this.plan = plan;
+    }
+
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     *
+     * @param acronym
+     */
+    public void setAcronym(String acronym) {
+        this.acronym = acronym;
+    }
+
+    /**
+     *
+     * @param purpose
+     */
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    /**
+     *
+     * @param date_created
+     */
     public void setDate_created(LocalDate date_created) {
         this.date_created = date_created;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    private void setId(String name) {
-        this.id = "";
-    }
-    
-    
+    /**
+     *
+     * @param date_modified
+     */
+    public void setDate_modified(LocalDateTime date_modified) {
+        this.date_modified = date_modified;
+    }    
 }
