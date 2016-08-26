@@ -18,8 +18,6 @@ public class Collaborator {
     private short employee_id;
     private String firstName;
     private String lastName;
-    private String username = null;
-    private String password = null;        
     
     /** 
     * Class Empty constructor.
@@ -35,11 +33,8 @@ public class Collaborator {
      * @param names
      * @param charge
      */
-    public Collaborator(String username, String password, String firstName,
-            String lastName, String charge) {
+    public Collaborator(String firstName, String lastName, String charge) {
         // Variables Initialization
-        this.username = username;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.charge = charge;
@@ -70,14 +65,6 @@ public class Collaborator {
         return lastName;
     }
     
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    
     public void setF_area(FuntionalArea f_area) {
         this.f_area = f_area;
     }
@@ -103,13 +90,5 @@ public class Collaborator {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-        
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

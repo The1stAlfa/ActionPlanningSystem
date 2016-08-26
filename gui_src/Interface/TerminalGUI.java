@@ -37,6 +37,7 @@ import javax.swing.JMenu;
  * |         COLORS         | HEX.CODE|          ANALOG COLORS         |         COMPLEMENTARY COLORS     |         MONOCROMATIC COLORS        |             COMPOUND COLORS            |
  * +----------------------------------+--------------------------------+----------------------------------+------------------------------------+----------------------------------------+
  * |------------------------|---------|--------------------------------|----------------------------------|------------------------------------|----------------------------------------|
+ * | BACKGROUND BLACK       | #303132 |
  * | ABSOLUTE WHITE         | #FFFFFF |                                |                                  |                                    |                                        |
  * | ABSOLUTE BLACK         | #000000 |                                |                                  |                                    |                                        |
  * | HOLCIM WHITE           | #FCFEFC |R#FF0000 ORA#E8AE0C             |GR#00FF00-19FF19 MAG#FF007F-B20059|GRA#CACCCA W#FDFFFD GR#587F58-B0FFB0|GR#5A995A GRE#B9B5CC W#FEFFFC PUI#DABCFF|
@@ -69,6 +70,7 @@ public class TerminalGUI extends JFrame{
     public JLabel hallLabel, movieLabel, aboutLabel, settingsLabel, userLabel;
     private JLabel initImageLabel;
    // private JMenuItem item;
+    private final CustomFont roboto = new CustomFont();
     private String resource;
     private boolean resizeFlag = false;
 
@@ -78,7 +80,7 @@ public class TerminalGUI extends JFrame{
     }
             
     private void initComponents(){
-        resource = "resources/images/";
+        resource = "gui_src/images/";
         setUndecorated(true);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -204,15 +206,15 @@ public class TerminalGUI extends JFrame{
     }
     
     private JMenuItem createMenuItem(JMenuItem item, String iconName){
-        item.setBackground(Color.decode("#000000"));
+        item.setBackground(Color.decode("#303132"));
         //item.setBorder(BorderFactory.createMatteBorder(0,0,0,1,Color.decode("#202020")));
-        item.setFont(new Font("Hall",Font.PLAIN,15));
-        item.setForeground(Color.WHITE);
+        item.setFont(roboto.MyFont(1, 13f));
+        item.setForeground(Color.decode("#9B9B9B"));
         item.setIconTextGap(7);
         item.setMaximumSize(new Dimension(Integer.MAX_VALUE,78));
         item.setPreferredSize(new Dimension(165,78));
         item.setIcon(new ImageIcon(resource+iconName));
-        item.setMargin(new Insets(0,10,0,0));
+        //item.setMargin(new Insets(0,35,0,0));
         
         return item;
     }
@@ -221,14 +223,14 @@ public class TerminalGUI extends JFrame{
         item.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                item.setBackground(Color.decode("#202020"));
+                item.setBackground(Color.decode("#3E4242"));
                 item.setIcon(new ImageIcon(resource+iconName));
-                item.setForeground(Color.decode("#FC4344"));
+                //item.setForeground(Color.decode("#FC4344"));
                 item.repaint();
             }
             @Override
             public void mouseExited(MouseEvent e){
-                item.setBackground(Color.decode("#000000"));
+                item.setBackground(Color.decode("#303132"));
                 item.setIcon(new ImageIcon(resource+iconName2));
                 item.setForeground(Color.WHITE);
                 item.repaint();
@@ -260,18 +262,18 @@ public class TerminalGUI extends JFrame{
     private void createMainMenu(){ 
         mainMenu = new JMenuBar();
         dashboardMenu = new JMenuItem("DASHBOARD");
-        meetingMenu = new JMenuItem("    MEETING");
-        actionPlanMenu = new JMenuItem( "ACTION PLAN");
-        teamMenu = new JMenuItem(   "       TEAM");
-        profileMenu = new JMenuItem("    PROFILE");
-        settingMenu = new JMenuItem("   SETTINGS");
-        exitItem = new JMenuItem("        EXIT");
+        meetingMenu = new JMenuItem("MEETING");
+        actionPlanMenu = new JMenuItem("ACTION PLAN");
+        teamMenu = new JMenuItem("TEAM");
+        profileMenu = new JMenuItem("PROFILE");
+        settingMenu = new JMenuItem("SETTINGS");
+        exitItem = new JMenuItem("EXIT");
         
         mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.PAGE_AXIS));
         mainMenu.setMaximumSize(new Dimension(165,Integer.MAX_VALUE));
         mainMenu.setPreferredSize(new Dimension(165,600));
         mainMenu.setMinimumSize(new Dimension(50,50));
-        mainMenu.setBackground(Color.decode("#000000"));
+        mainMenu.setBackground(Color.decode("#303132"));
         mainMenu.setBorder(BorderFactory.createMatteBorder(0,0,0,1,Color.decode("#202020")));
         
         mainMenu.add(createMenuItem(dashboardMenu, "dash.png"));
