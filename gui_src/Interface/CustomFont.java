@@ -10,9 +10,9 @@ import java.io.InputStream;
 public class CustomFont {
 
     private Font font = null;
-
+    private String fontName = "gui_src/fonts/roboto/Roboto-Light.ttf";
+    
     public CustomFont() {
-        String fontName = "resources/fonts/roboto/Roboto-Condensed.ttf" ;
         try {
             //Se carga la fuente
             InputStream is =  getClass().getResourceAsStream(fontName);

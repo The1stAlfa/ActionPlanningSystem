@@ -67,7 +67,11 @@ public class Terminal extends javax.swing.JFrame {
         jMenuItem1.setText("jMenuItem1");
         jPopupMenu1.add(jMenuItem1);
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/PlanB-Logo 24x24.png"))); // NOI18N
         jMenu1.setText("jMenu1");
+        jMenu1.setAlignmentX(0.8F);
+        jMenu1.setIconTextGap(20);
+        jMenu1.setMargin(new java.awt.Insets(2, 10, 2, 2));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(1);
@@ -263,7 +267,6 @@ public class Terminal extends javax.swing.JFrame {
         jPanel4.getAccessibleContext().setAccessibleDescription("");
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
-        jPanel2.getAccessibleContext().setAccessibleParent(jPanel3);
 
         getAccessibleContext().setAccessibleName("myframe");
 
