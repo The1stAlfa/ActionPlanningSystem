@@ -8,6 +8,8 @@ package System;
 import Interface.TerminalGUI;
 import Interface.WLogin;
 import aps.Organization;
+import java.awt.FontFormatException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.UIManager;
 
@@ -75,7 +77,7 @@ public class APSys {
      *
      * @param user
      */
-    public static void deploySystem(User user){
+    public static void deploySystem(User user) throws IOException, FontFormatException{
         //APSys.terminal_APSys.setUser(user);
         APSys.terminalGUI_APSys = new TerminalGUI();
     }

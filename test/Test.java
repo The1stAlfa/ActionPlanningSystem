@@ -35,7 +35,7 @@ public class Test {
         Action ac2 = new Action();
         ac2.setID("RES",(short)146,(byte)4);
         ap = new ActionPlan();
-        ap.setAction_increment((short)4);        ;
+        ap.setAction_increment((short)4); 
         ap.insertActionItem(ac1);
         ap.insertActionItem(ac2);
         Action s = ap.searchActionItem("RES0147");
@@ -46,6 +46,9 @@ public class Test {
         String incremented = String.format("%0" + original.length() + "d", 
                 Integer.parseInt(original) + 1000);
         System.out.println(incremented);
+        PFrame p = new PFrame();
+        p.setVisible(true);
+        p.setExtendedState(6);
         
     }
     

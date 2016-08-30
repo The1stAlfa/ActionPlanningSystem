@@ -11,11 +11,17 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.Frame;
+import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,6 +31,8 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 /**
  * @palette
@@ -65,17 +73,15 @@ public class TerminalGUI extends JFrame{
     private JLabel apsLogoLabel, resizeLabel, minimizeLabel, closeLabel;
     public JLabel hallLabel, movieLabel, aboutLabel, settingsLabel, userLabel;
     private JLabel initImageLabel;
-   // private JMenuItem item;
-    private final CustomFont roboto = new CustomFont();
     private String resource;
     private boolean menuFlag = false, resizeFlag = false;
 
        
-    public TerminalGUI(){
-        initComponents();            
+    public TerminalGUI() throws IOException, FontFormatException{
+        initComponents(); 
     }
             
-    private void initComponents(){
+    private void initComponents() throws FontFormatException{
         resource = "gui_src/images/";
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -84,6 +90,11 @@ public class TerminalGUI extends JFrame{
         setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         setMinimumSize(new Dimension(867,662));
         this.setResizable(true);
+        UIManager.put("ToolTip.background", Color.decode("#303132"));
+        UIManager.put("ToolTip.foreground", Color.decode("#C9CDD1"));
+        Border border = BorderFactory.createMatteBorder(1,1,1,1,Color.decode("#3B3C3D"));
+        UIManager.put("ToolTip.border", border);
+        setIconImage(new ImageIcon(getClass().getResource("../images/planB-27x32.png")).getImage());
         createTitleBarPanel();
         createMainMenu();
         createOptionsContentPanel();
@@ -97,7 +108,9 @@ public class TerminalGUI extends JFrame{
         mainPanel.add(titleBarPanel, BorderLayout.NORTH);
         mainPanel.add(mainMenu, BorderLayout.WEST);
         mainPanel.add(optionsContentPanel, BorderLayout.CENTER);
+        addFonts();
         pack();
+        maximize(6);
         setVisible(true);
     }
     
@@ -114,6 +127,10 @@ public class TerminalGUI extends JFrame{
         
         frameButtonsPanel = new JPanel();
         apsLogoLabel = new JLabel("PlanB System 1.0");
+        apsLogoLabel.setIcon(new ImageIcon(resource+"planB-18x21.png"));
+        apsLogoLabel.setIconTextGap(3);
+        Border border = BorderFactory.createEmptyBorder(0,4,0,0);
+        apsLogoLabel.setBorder(border);
         resizeLabel = new JLabel(new ImageIcon(resource+"tabB.png"), JLabel.CENTER);
         minimizeLabel = new JLabel(new ImageIcon(resource+"minusB.png"), JLabel.CENTER);
         closeLabel = new JLabel(new ImageIcon(resource+"closeB.png"), JLabel.CENTER);
@@ -121,18 +138,20 @@ public class TerminalGUI extends JFrame{
         apsLogoLabel.setForeground(Color.decode("#707070"));
         apsLogoLabel.setHorizontalAlignment(JLabel.CENTER);
         apsLogoLabel.setFont(new Font("Roboto-Thin",Font.BOLD,12));
-        apsLogoLabel.setHorizontalTextPosition(JLabel.LEFT);
+        apsLogoLabel.setHorizontalTextPosition(JLabel.RIGHT);
         
         resizeLabel.setOpaque(true);
         resizeLabel.setBackground(Color.decode("#FCFEFC"));
         resizeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         resizeLabel.setMaximumSize(new Dimension(47,30));
         resizeLabel.setPreferredSize(new Dimension(47,30));
+        resizeLabel.setToolTipText("Minimize:size");
         resizeLabel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseEntered(MouseEvent e){
                 resizeLabel.setBackground(Color.decode("#E2E5E2"));
                 resizeLabel.repaint();
+                
             }
             @Override
             public void mouseExited(MouseEvent e){
@@ -150,6 +169,7 @@ public class TerminalGUI extends JFrame{
         minimizeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         minimizeLabel.setMaximumSize(new Dimension(47,30));
         minimizeLabel.setPreferredSize(new Dimension(47,30));
+        minimizeLabel.setToolTipText("Minimize");
         minimizeLabel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseEntered(MouseEvent e){
@@ -174,6 +194,7 @@ public class TerminalGUI extends JFrame{
         closeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         closeLabel.setMaximumSize(new Dimension(47,30));
         closeLabel.setPreferredSize(new Dimension(47,30));
+        closeLabel.setToolTipText("Close");
         closeLabel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseEntered(MouseEvent e){
@@ -208,7 +229,6 @@ public class TerminalGUI extends JFrame{
     
     private JMenuItem createMenuItem(JMenuItem item, String iconName){
         item.setBackground(Color.decode("#303132"));
-        //item.setBorder(BorderFactory.createMatteBorder(0,0,0,1,Color.decode("#202020")));
         item.setFont(new Font("Roboto-Regular", Font.PLAIN, 14));
         //FFFBF5
         item.setForeground(Color.decode("#C9CDD1"));
@@ -245,6 +265,8 @@ public class TerminalGUI extends JFrame{
                 if(item.equals(menuItem)){
                     if(!menuFlag){
                         mainMenu.setPreferredSize(new Dimension(165,600));
+                        //menuItem.setToolTipText("<html><body style=\"background-color:#303132;color:#C9CDD1;border=0\">"
+                        //        + " Minimize Navigation Bar </body></ht‌​ml>");
                         menuItem.setToolTipText("Minimize Navigation Bar");
                         mainPanel.revalidate();
                         menuFlag = true;
@@ -280,13 +302,41 @@ public class TerminalGUI extends JFrame{
    
     private void createMainMenu(){ 
         mainMenu = new JMenuBar();
-        dashboardMenu = new JMenuItem(" DashBoard");
-        meetingMenu = new JMenuItem(" Meeting");
-        actionPlanMenu = new JMenuItem(" Action Plan");
-        teamMenu = new JMenuItem(" Team");
-        profileMenu = new JMenuItem(" Profile");
-        settingMenu = new JMenuItem(" Settings");
-        menuItem = new JMenuItem("");
+        dashboardMenu = new JMenuItem(" DashBoard"){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
+        meetingMenu = new JMenuItem(" Meeting"){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
+        actionPlanMenu = new JMenuItem(" Action Plan"){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
+        teamMenu = new JMenuItem(" Team"){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
+        profileMenu = new JMenuItem(" Profile"){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
+        settingMenu = new JMenuItem(" Settings"){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
+        menuItem = new JMenuItem(""){ 
+            public Point getToolTipLocation(MouseEvent e) {
+                return new Point(5, -15);
+            }
+        };
         
         mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.PAGE_AXIS));
         mainMenu.setMaximumSize(new Dimension(165,Integer.MAX_VALUE));
@@ -378,15 +428,17 @@ public class TerminalGUI extends JFrame{
             this.setLocation(xPosition,yPosition);
             frameButtonsPanel.setPreferredSize(new Dimension(d.width,30));
             resizeLabel.setIcon(new ImageIcon(resource+"resize.png"));
+            resizeLabel.setToolTipText("Maximize");
             pack();
             resizeFlag = true;
         }
         else{ // Restoring statements
             this.setLocation(0,0);
             this.setPreferredSize(nativeScreenSize);
-            this.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frameButtonsPanel.setPreferredSize(new Dimension(nativeScreenSize.width,30));
             resizeLabel.setIcon(new ImageIcon(resource+"tabB.png"));
+            resizeLabel.setToolTipText("Minimize:Size");
+            maximize(6);
             revalidate();
             resizeFlag = false;
         }
@@ -395,5 +447,28 @@ public class TerminalGUI extends JFrame{
     public JFrame getJFrame(){
         return this;
     }
-
+    
+    public synchronized void maximize(int state){
+        if ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) { 
+            Insets screenInsets = getToolkit().getScreenInsets(getGraphicsConfiguration());
+            Rectangle screenSize = getGraphicsConfiguration().getBounds();
+            Rectangle maxBounds = new Rectangle(screenInsets.left + screenSize.x, 
+                    screenInsets.top + screenSize.y, 
+                    screenSize.x + screenSize.width - screenInsets.right - screenInsets.left,
+                    screenSize.y + screenSize.height - screenInsets.bottom - screenInsets.top); 
+            this.setMaximizedBounds(maxBounds); 
+        } 
+        this.setExtendedState(state);
+    }
+    
+    public void addFonts() throws FontFormatException{
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("gui_src\\fonts\\diane_de_france\\Diane de France.ttf")));
+        }
+        catch (IOException e) {
+            //Handle exception
+            System.out.println("MAL");
+        }
+    }
 }
