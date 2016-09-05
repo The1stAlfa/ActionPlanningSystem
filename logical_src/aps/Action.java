@@ -13,7 +13,7 @@ public class Action {
     //aps Class Variables 
     private Collaborator responsible;
     private ArrayList<Task> tasks_list;
-    private State state;
+    private Status status;
     //************************************************************************
     // Format of a customize Action Plan
     private String itemID;
@@ -65,7 +65,7 @@ public class Action {
         this.planned_finish_date = planned_finish_date;
         this.comments = comments;
         this.benefit = benefit;
-        setState();
+        setStatus();
         this.date_created = LocalDateTime.now();
     }
      
@@ -89,8 +89,8 @@ public class Action {
      *
      * @return
      */
-    public State getState() {
-        return state;
+    public Status getStatus() {
+        return status;
     }
     
     /**
@@ -232,8 +232,8 @@ public class Action {
     /**
      *
      */
-    public void setState() {
-        this.state = this.state.IN_PROCESS;
+    public void setStatus() {
+        this.status = this.status.IN_PROCESS;
     }
     
     /**

@@ -10,10 +10,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -25,14 +28,21 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
+import javax.swing.border.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * @palette
@@ -401,17 +411,319 @@ public class TerminalGUI extends JFrame{
     }
     
     private void createActionPlanPanel(){
+        JLabel apLabel, owLabel, parLabel, meetLabel, actLabel, compLabel, 
+                compAppLabel, overAppLabel, actContentLabel, owContentLabel,
+                compContentLabel, compAppContentLabel, overAppContentLabel, 
+                performanceLabel, exeLabel, performanceContentLabel, 
+                exeContentLabel;
+        GridBagConstraints gbc = new GridBagConstraints();
+        JComboBox meetComboBox = new JComboBox();
+        JTable jTable1 = new JTable();
+        JScrollPane jScrollPane1, jScrollPane2;
+        JTextPane jTextPane1 = new JTextPane();
+        JPanel modifyPanel = new JPanel();
+        JLabel addAction, editAction;
+        
         actionPlanPanel = new JPanel();
         actionPlanPanel.setLayout(new BorderLayout());
         actionPlanPanel.setMaximumSize(new Dimension(Short.MAX_VALUE,Short.MAX_VALUE));
         actionPlanPanel.setBackground(Color.decode("#FCFEFC"));
         
-        JLabel p = new JLabel(new ImageIcon(resource+"movie-reels-and-popcorn.png"), JLabel.CENTER);
+        JPanel pane = new JPanel();
+        pane.setLayout(new GridBagLayout());
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new BorderLayout());
+        pane2.setPreferredSize(new Dimension(300,300));
+        
+        apLabel = new JLabel("Action Plan");
+        apLabel.setFont(new Font("Dialog", 1, 24)); // NOI18N
+        apLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        apLabel.setVerticalTextPosition(SwingConstants.TOP);
+        
+        gbc.gridx = 7;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        pane.add(apLabel, gbc);
+        
+        owLabel = new JLabel("Owner");
+        owLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        owLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        owLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+        owLabel.setMaximumSize(new Dimension(45, 16));
+        owLabel.setMinimumSize(new Dimension(45, 16));
+        owLabel.setPreferredSize(new Dimension(45, 16));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 2, 2, 3);
+        pane.add(owLabel, gbc);
+
+        parLabel = new JLabel("Participants");
+        parLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        parLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        parLabel.setVerticalAlignment(SwingConstants.TOP);
+        parLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+        parLabel.setPreferredSize(new Dimension(82, 16));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.insets = new Insets(0, 4, 2, 3);
+        pane.add(parLabel, gbc);
+        
+        meetLabel = new JLabel("Meeting");
+        meetLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        meetLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        meetLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 2, 2, 3);
+        pane.add(meetLabel, gbc);
+        
+        meetComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        meetComboBox.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(204, 204, 204), null, null));
+        meetComboBox.setMaximumSize(new Dimension(150, 24));
+        meetComboBox.setPreferredSize(new Dimension(150, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.insets = new Insets(0, 2, 2, 2);
+        pane.add(meetComboBox, gbc);
+
+        actLabel = new JLabel("Actions");
+        actLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        actLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        gbc =  new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 2, 2, 2);
+        pane.add(actLabel, gbc);
+
+        compLabel = new JLabel("Completed");
+        compLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        compLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 2, 2, 2);
+        pane.add(compLabel, gbc);
+
+        compAppLabel = new JLabel("Completed APP");
+        compAppLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        compAppLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        compAppLabel.setVerticalAlignment(SwingConstants.TOP);
+        compAppLabel.setPreferredSize(new Dimension(105, 24));
+        compAppLabel.setVerticalTextPosition(SwingConstants.TOP);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.insets = new Insets(0, 4, 2, 2);
+        pane.add(compAppLabel, gbc);
+        
+        overAppLabel = new JLabel("OverDue APP");
+        overAppLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        overAppLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 2, 2, 2);
+        pane.add(overAppLabel, gbc);
+
+        actContentLabel = new JLabel("100");
+        actContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        actContentLabel.setPreferredSize(new Dimension(40, 16));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pane.add(actContentLabel, gbc);
+
+        owContentLabel = new JLabel("Sergio Orjuela");
+        owContentLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        owContentLabel.setLabelFor(owLabel);
+        owContentLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+        owContentLabel.setPreferredSize(new Dimension(150, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.ipadx = 2;
+        gbc.ipady = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 4, 3, 2);
+        pane.add(owContentLabel, gbc);
+        
+        jTable1.setModel(new DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null},
+                {null, null, null, null,null, null, null, null,null, null, null, null}
+            },
+            new String [] {
+                "id", "OM", "Action Detail", "Owner", "Comments", 
+                "Planned Start Date", "Planned Finish Date", "Real Finish Date",
+                "Progress", "Status", "Duration" 
+            }
+        ));
+        jTable1.setMinimumSize(new Dimension(300, 200));
+        jScrollPane2 = new JScrollPane();
+        jScrollPane2.setViewportView(jTable1);
+        pane2.add(jScrollPane2, BorderLayout.CENTER);
+        
+        compContentLabel = new JLabel("56");
+        compContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        compContentLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(0, 2, 2, 2);
+        pane.add(compContentLabel, gbc);
+
+        compAppContentLabel = new JLabel("28");
+        compAppContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        compAppContentLabel.setVerticalAlignment(SwingConstants.TOP);
+        compAppContentLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+        compAppContentLabel.setVerticalTextPosition(SwingConstants.TOP);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        pane.add(compAppContentLabel, gbc);
+
+        overAppContentLabel = new JLabel("16");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        pane.add(overAppContentLabel, gbc);
+
+        performanceLabel = new JLabel("Team Preformance APP");
+        performanceLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        performanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        performanceLabel.setPreferredSize(new Dimension(164, 16));
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+        gbc.insets = new Insets(0, 12, 2, 2);
+        pane.add(performanceLabel, gbc);
+        
+        jScrollPane1 = new JScrollPane();
+        jScrollPane1.setPreferredSize(new Dimension(150, 25));
+
+        jTextPane1.setText("SOR, MCI, JOA, TED, POA, WAO");
+        jTextPane1.setEditable(false);
+        jTextPane1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(jTextPane1);
+
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        pane.add(jScrollPane1, gbc);
+
+        exeLabel = new JLabel("Overall Execution");
+        exeLabel.setFont(new Font("Dialog", 1, 14));
+        exeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        pane.add(exeLabel, gbc);
+
+        performanceContentLabel = new JLabel("67%"); 
+        performanceContentLabel.setBackground(new Color(55, 55, 55));
+        performanceContentLabel.setFont(new Font("Dialog", 1, 18)); // NOI18N
+        performanceContentLabel.setForeground(new Color(255, 255, 255));
+        performanceContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        performanceContentLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+        performanceContentLabel.setMaximumSize(new Dimension(77, 24));
+        performanceContentLabel.setOpaque(true);
+        performanceContentLabel.setPreferredSize(new Dimension(77, 24));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 7;
+        gbc.gridy = 1;
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 12, 2, 2);
+        pane.add(performanceContentLabel, gbc);
+
+        exeContentLabel = new JLabel("86%");
+        exeContentLabel.setBackground(new Color(55, 55, 55));
+        exeContentLabel.setFont(new Font("Dialog", 1, 18)); // NOI18N
+        exeContentLabel.setForeground(new Color(255, 255, 255));
+        exeContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        exeContentLabel.setOpaque(true);
+        exeContentLabel.setPreferredSize(new Dimension(77, 16));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 7;
+        gbc.gridy = 3;
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 12, 2, 2);
+        pane.add(exeContentLabel, gbc);
+
+        /*JLabel p = new JLabel(new ImageIcon(resource+"movie-reels-and-popcorn.png"), JLabel.CENTER);
         p.setMaximumSize(new Dimension(Short.MAX_VALUE,Short.MAX_VALUE));
         p.setPreferredSize(new Dimension(500,328));
         p.setBackground(Color.decode("#FCFEFC"));
-        
-        actionPlanPanel.add(p, BorderLayout.CENTER);
+        */
+        addAction = new JLabel();
+        editAction = new JLabel();
+        editAction.setIcon(new ImageIcon(resource+"delete-16.png"));
+        modifyPanel.setLayout(new FlowLayout());
+        modifyPanel.add(addAction);
+        modifyPanel.add(editAction);
+        pane2.add(modifyPanel, BorderLayout.EAST);
+        actionPlanPanel.add(pane, BorderLayout.NORTH);
+        actionPlanPanel.add(pane2, BorderLayout.CENTER);
         
     }
     

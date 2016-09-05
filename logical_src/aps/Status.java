@@ -10,7 +10,7 @@ package aps;
  *
  * @author Jordone3
  */
-public enum State {
+public enum Status {
 
     /**
      *

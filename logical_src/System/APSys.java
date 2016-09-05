@@ -5,12 +5,15 @@
  */
 package System;
 
+import Interface.SplashWindow;
 import Interface.TerminalGUI;
 import Interface.WLogin;
 import aps.Organization;
 import java.awt.FontFormatException;
+import java.awt.Frame;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 
 /**
@@ -34,25 +37,24 @@ public class APSys {
     public static void main(String[] args) throws InterruptedException, 
             InvocationTargetException,
             Exception {
-        APSys.terminalGUI_APSys = new TerminalGUI();
         terminal_APSys = new Terminal();
-        try {
-            Thread.sleep(1500);
-	} catch (InterruptedException e) {
-        }
-        
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run(){            
+                SplashWindow w = new SplashWindow("gui_src\\images\\planB-182x263.png", 
+                new Frame(), 2500);
                 //WLogin loginWindow = new WLogin();
                 try {
                     UIManager.setLookAndFeel(
                             "javax.swing.plaf.metal.MetalLookAndFeel");
                           // "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
                         //UIManager.getCrossPlatformLookAndFeelClassName());
+                    deploySystem(null);
                 } catch (Exception ex) {
-                   
+                    System.out.println("MAL");
+                    ex.printStackTrace();
                 }
+                 
             }
         });
     }

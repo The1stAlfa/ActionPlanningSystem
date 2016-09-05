@@ -14,6 +14,7 @@ public class SplashWindow extends JWindow{
                 JLabel l = new JLabel(new ImageIcon(filename));
                 AWTUtilities.setWindowOpaque(this,false);
 		getContentPane().add(l, BorderLayout.CENTER);
+                setProgressBar(new JProgressBar());
                 pack();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension labelSize = l.getPreferredSize();
@@ -48,5 +49,9 @@ public class SplashWindow extends JWindow{
 		setVisible(true);
 		Thread splashThread = new Thread(waitRunner, "SplashThread");
 		splashThread.start();
-	}	
+	}
+        
+        public void setProgressBar(JProgressBar b){
+            this.getContentPane().add(b, BorderLayout.SOUTH);
+        }
 }
