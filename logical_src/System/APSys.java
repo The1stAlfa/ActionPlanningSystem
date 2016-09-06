@@ -82,6 +82,11 @@ public class APSys {
      */
     public static void deploySystem(User user) throws IOException, FontFormatException{
         //APSys.terminal_APSys.setUser(user);
-        APSys.terminalGUI_APSys = new TerminalGUI();
+        try{
+            APSys.terminalGUI_APSys = new TerminalGUI();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

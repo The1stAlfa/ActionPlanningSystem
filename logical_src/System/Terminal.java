@@ -139,23 +139,21 @@ public class Terminal{
         
     }*/
     
-    public ArrayList<ArrayList<Object>> getTableContent(ActionItemFilter filter) throws Exception{
-        ArrayList<ArrayList<Object>> list = new ArrayList<>();
+    public Object[][] getTableContent(ActionItemFilter filter) throws Exception{
+        ArrayList<Object[]> list = new ArrayList<>();
+        Object[][] o = null;
         String id, om, detail, owner, comments, p_start_date, p_finish_date,
                 r_finish_date, progress, status, duration;
         
         if(filter.equals(ActionItemFilter.ALL)){
-            String query = "SELECT item_id, om_number, om_detail, comments,"
-                    + " p_start_date, p_finish_date, r_finish_date, progress,"
-                    + "status, duration FROM planb.actionitem;";
+            String query = "SELECT id,item_id, om_number, om_detail, comments,p_start_date, p_finish_date, r_finish_date, progress,status, duration FROM planb.actionitem;";
             planB_DB.connection();
             ResultSet rs = planB_DB.selectQuery(query);
-            planB_DB.disconnection();
             if(rs != null){
                 while(rs.next()){
                     ArrayList<Object> l = new ArrayList();
-                    id = rs.getString("item_id");
-                    l.add(id);
+                    id = rs.getString("id");
+                    l.add(rs.getString("item_id"));
                     l.add(rs.getString("om_number"));
                     l.add(rs.getString("om_detail")) ;
                     l.add(getOwnerAcronym(id));
@@ -166,26 +164,40 @@ public class Terminal{
                     l.add(rs.getString("progress"));
                     l.add(getStatusName(rs.getInt("status")));
                     l.add(rs.getString("duration"));
-                    list.add(l);
+                    list.add(l.toArray());
+                }
+                o = new Object[list.size()][11];
+                for(int i=0;i<o.length;i++){
+                    for(int j=0;j<11;j++){
+                        o[i][j] = list.get(i);
+                    }
                 }
             }
+            planB_DB.disconnection();
         }
-        return list;
+        return o;
     }
     
     public String getOwnerAcronym(String actionItemID) throws Exception{
         String query = "SELECT acronym_name FROM planb.collaborator INNER "
                 + "JOIN planb.collaborator_actionitem ON "
-                + "collaborator.idcollaborator=collaborator_actionitem.collaborator_id "
-                + "AND collaborator_actionitem.action-item_id ="+actionItemID+";";
-        planB_DB.connection();
-        ResultSet rs = planB_DB.selectQuery(query);
-        planB_DB.disconnection();
-        return rs.getString("acronym_name");
+                + "collaborator.employee_id=collaborator_actionitem.collaborator_id "
+                + "AND collaborator_actionitem.actionitem_id ="+actionItemID+";";
+        DataBase db = new DataBase();
+        db.connection();
+        ResultSet rs = db.selectQuery(query);
+        String acronym = rs.getString("acronym_name"); 
+        db.disconnection();
+        return acronym;
     }
     
     public String getStatusName(int status){
-         
+        Status st[] = Status.values();
+        for(Status s:st){
+            if(s.getValue()==status){
+                return s.toString();
+            }
+        }
         return null;
     }
 }

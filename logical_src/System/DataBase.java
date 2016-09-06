@@ -72,9 +72,6 @@ public class DataBase {
         catch(SQLException e){
             
         }
-        finally{
-            s.close();
-        }
         return rs;
     }
     

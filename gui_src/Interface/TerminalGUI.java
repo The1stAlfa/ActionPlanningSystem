@@ -6,6 +6,8 @@
 
 package Interface;
 
+import System.APSys;
+import aps.ActionItemFilter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -87,11 +89,11 @@ public class TerminalGUI extends JFrame{
     private boolean menuFlag = false, resizeFlag = false;
 
        
-    public TerminalGUI() throws IOException, FontFormatException{
+    public TerminalGUI() throws IOException, FontFormatException, Exception{
         initComponents(); 
     }
             
-    private void initComponents() throws FontFormatException{
+    private void initComponents() throws FontFormatException, Exception{
         resource = "gui_src/images/";
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -375,7 +377,7 @@ public class TerminalGUI extends JFrame{
         
     }
     
-    private void createOptionsContentPanel(){
+    private void createOptionsContentPanel() throws Exception{
         optionsContentPanel = new JPanel();
         optionsContentPanel.setBackground(Color.decode("#FCFEFC"));
         optionsContentPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
@@ -410,7 +412,7 @@ public class TerminalGUI extends JFrame{
         
     }
     
-    private void createActionPlanPanel(){
+    private void createActionPlanPanel() throws Exception{
         JLabel apLabel, owLabel, parLabel, meetLabel, actLabel, compLabel, 
                 compAppLabel, overAppLabel, actContentLabel, owContentLabel,
                 compContentLabel, compAppContentLabel, overAppContentLabel, 
@@ -586,17 +588,8 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 4, 3, 2);
         pane.add(owContentLabel, gbc);
         
-        jTable1.setModel(new DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null},
-                {null, null, null, null,null, null, null, null,null, null, null, null}
-            },
+        jTable1.setModel(new DefaultTableModel(APSys.getTerminal().getTableContent(ActionItemFilter.ALL)
+            ,
             new String [] {
                 "id", "OM", "Action Detail", "Owner", "Comments", 
                 "Planned Start Date", "Planned Finish Date", "Real Finish Date",
