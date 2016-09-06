@@ -15,29 +15,39 @@ public enum Status {
     /**
      *
      */
-    COMPLETED_AFTER_APP,
+    COMPLETED_AFTER_APP (1),
     /**
      *
      */
-    COMPLETED_APP,
+    COMPLETED_APP (2),
     /**
      *
      */
-    IN_PROCESS,
+    IN_PROCESS (3),
     /**
      *
      */
-    NEAR_DUE_DATE,
+    NEAR_DUE_DATE (4),
     /**
      *
      */
-    OVERDUE,
+    OVERDUE (5),
     /**
      *
      */
-    CANCELLED,
+    CANCELLED (6),
     /**
      *
      */
-    WAITING_TO_START,
+    WAITING_TO_START (7);
+    
+    private int value;
+    
+    private Status(int value){
+        this.value = value;
+    }
+    
+    public int getValue(){
+        return this.value;
+    }
 }

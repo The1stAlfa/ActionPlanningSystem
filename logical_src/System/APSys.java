@@ -8,7 +8,7 @@ package System;
 import Interface.SplashWindow;
 import Interface.TerminalGUI;
 import Interface.WLogin;
-import aps.Organization;
+import aps.*;
 import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.io.IOException;
@@ -28,6 +28,7 @@ public class APSys {
     public static Organization org = new Organization();
     private static Terminal terminal_APSys;
     private static TerminalGUI terminalGUI_APSys;
+    
     /**
      * @param args the command line arguments
      * @throws java.lang.InterruptedException

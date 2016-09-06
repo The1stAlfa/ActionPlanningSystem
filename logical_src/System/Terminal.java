@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import aps.*;
+import java.sql.ResultSet;
 
 
 public class Terminal{
@@ -137,4 +138,54 @@ public class Terminal{
         return false;
         
     }*/
+    
+    public ArrayList<ArrayList<Object>> getTableContent(ActionItemFilter filter) throws Exception{
+        ArrayList<ArrayList<Object>> list = new ArrayList<>();
+        String id, om, detail, owner, comments, p_start_date, p_finish_date,
+                r_finish_date, progress, status, duration;
+        
+        if(filter.equals(ActionItemFilter.ALL)){
+            String query = "SELECT item_id, om_number, om_detail, comments,"
+                    + " p_start_date, p_finish_date, r_finish_date, progress,"
+                    + "status, duration FROM planb.actionitem;";
+            planB_DB.connection();
+            ResultSet rs = planB_DB.selectQuery(query);
+            planB_DB.disconnection();
+            if(rs != null){
+                while(rs.next()){
+                    ArrayList<Object> l = new ArrayList();
+                    id = rs.getString("item_id");
+                    l.add(id);
+                    l.add(rs.getString("om_number"));
+                    l.add(rs.getString("om_detail")) ;
+                    l.add(getOwnerAcronym(id));
+                    l.add(rs.getString("comments"));
+                    l.add(rs.getString("p_start_date"));
+                    l.add(rs.getString("p_finish_date"));
+                    l.add(rs.getString("r_finish_date"));
+                    l.add(rs.getString("progress"));
+                    l.add(getStatusName(rs.getInt("status")));
+                    l.add(rs.getString("duration"));
+                    list.add(l);
+                }
+            }
+        }
+        return list;
+    }
+    
+    public String getOwnerAcronym(String actionItemID) throws Exception{
+        String query = "SELECT acronym_name FROM planb.collaborator INNER "
+                + "JOIN planb.collaborator_actionitem ON "
+                + "collaborator.idcollaborator=collaborator_actionitem.collaborator_id "
+                + "AND collaborator_actionitem.action-item_id ="+actionItemID+";";
+        planB_DB.connection();
+        ResultSet rs = planB_DB.selectQuery(query);
+        planB_DB.disconnection();
+        return rs.getString("acronym_name");
+    }
+    
+    public String getStatusName(int status){
+         
+        return null;
+    }
 }

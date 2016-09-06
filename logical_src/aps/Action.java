@@ -28,7 +28,7 @@ public class Action {
     private LocalDateTime date_modified;
     private String tracking_by;
     private byte duration;
-    private byte pOc; //action percentage of completion
+    private byte progress; //action percentage of completion
     private byte day_to_dueDate;
     private ArrayList<String> dependencies;  
     
@@ -193,8 +193,8 @@ public class Action {
      *
      * @return
      */
-    public byte getpOc() {
-        return pOc;
+    public byte getProgress() {
+        return progress;
     }
     
     /**
@@ -335,10 +335,10 @@ public class Action {
     
     /**
      *
-     * @param pOc
+     * @param progress
      */
-    public void setpOc(byte pOc) {
-        this.pOc = pOc;
+    public void setProgress(byte progress) {
+        this.progress = progress;
     }
  
     /**

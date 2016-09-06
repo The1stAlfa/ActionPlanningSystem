@@ -11,6 +11,7 @@ package aps;
  * @author Jordone3
  */
 public enum ActionItemFilter {
+    ALL,
     BY_DATE,
     BY_OWNER,
     BY_STATE,

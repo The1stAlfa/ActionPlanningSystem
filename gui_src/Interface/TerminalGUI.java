@@ -494,7 +494,7 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 2, 2, 3);
         pane.add(meetLabel, gbc);
         
-        meetComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        meetComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Comité Técnico Semanal", "Indicadores", "AFR", "Item 4" }));
         meetComboBox.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(204, 204, 204), null, null));
         meetComboBox.setMaximumSize(new Dimension(150, 24));
         meetComboBox.setPreferredSize(new Dimension(150, 24));
