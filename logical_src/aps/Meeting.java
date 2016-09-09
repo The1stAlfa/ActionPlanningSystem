@@ -52,7 +52,7 @@ public class Meeting {
      *
      * @return
      */
-    public ArrayList<Collaborator> getAdt_participants() {
+    public ArrayList<Collaborator> getAditionalParticipants() {
         return adt_participants;
     }
 
@@ -100,7 +100,7 @@ public class Meeting {
      *
      * @return
      */
-    public LocalDate getDate_created() {
+    public LocalDate getDateCreated() {
         return date_created;
     }
 
@@ -108,7 +108,7 @@ public class Meeting {
      *
      * @return
      */
-    public LocalDateTime getDate_modified() {
+    public LocalDateTime getDateModified() {
         return date_modified;
     }
 
@@ -116,7 +116,7 @@ public class Meeting {
      *
      * @param adt_participants
      */
-    public void setAdt_participants(ArrayList<Collaborator> adt_participants) {
+    public void setAditionalParticipants(ArrayList<Collaborator> adt_participants) {
         this.adt_participants = adt_participants;
     }
 
@@ -164,7 +164,7 @@ public class Meeting {
      *
      * @param date_created
      */
-    public void setDate_created(LocalDate date_created) {
+    public void setDateCreated(LocalDate date_created) {
         this.date_created = date_created;
     }
 
@@ -172,7 +172,7 @@ public class Meeting {
      *
      * @param date_modified
      */
-    public void setDate_modified(LocalDateTime date_modified) {
+    public void setDateModified(LocalDateTime date_modified) {
         this.date_modified = date_modified;
     }    
 }

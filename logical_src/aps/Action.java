@@ -17,8 +17,7 @@ public class Action {
     //************************************************************************
     // Format of a customize Action Plan
     private String itemID;
-    private short om_number;  // om = Operational Measure
-    private String om_detail;
+    private String detail;
     private String comments;
     private String benefit;
     private LocalDate planned_start_date;  // Equals to APP = As Per Plan
@@ -29,7 +28,7 @@ public class Action {
     private String tracking_by;
     private byte duration;
     private byte progress; //action percentage of completion
-    private byte day_to_dueDate;
+    private byte days_to_dueDate;
     private ArrayList<String> dependencies;  
     
     public Action(){
@@ -39,8 +38,8 @@ public class Action {
     /** 
     * Class Empty constructor.
     */
-    public Action(String met, short inc, byte length){
-        setID(met, inc, length);
+    public Action(int facilty_id, String meeting, short number, byte zeros){
+        setID(facilty_id, meeting,number, zeros);
     }
     
     /**
@@ -54,18 +53,17 @@ public class Action {
      * @param comments
      * @param benefit
      */
-    public Action(String meeting_acronym, short om_number, String om_detail, 
-            Collaborator responsable, LocalDate planned_start_date, 
+    public Action(String meeting_acronym,String detail, 
+            Collaborator responsible, LocalDate planned_start_date, 
             LocalDate planned_finish_date,String comments, String benefit) {
-        setID(meeting_acronym, om_number, (byte)3);
-        this.om_number = om_number;
-        this.om_detail = om_detail;
-        this.responsible = responsable;
+        //setID(meeting_acronym,(byte)3);
+        this.detail = detail;
+        this.responsible = responsible;
         this.planned_start_date = planned_start_date;
         this.planned_finish_date = planned_finish_date;
         this.comments = comments;
         this.benefit = benefit;
-        setStatus();
+        setStatus(status);
         this.date_created = LocalDateTime.now();
     }
      
@@ -81,7 +79,7 @@ public class Action {
      *
      * @return
      */
-    public ArrayList<Task> getTasks_list() {
+    public ArrayList<Task> getTasksList() {
         return tasks_list;
     }
     
@@ -105,16 +103,8 @@ public class Action {
      *
      * @return
      */
-    public short getOm_number() {
-        return om_number;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public String getOm_detail() {
-        return om_detail;
+    public String getDetail() {
+        return detail;
     }
     
     /**
@@ -137,7 +127,7 @@ public class Action {
      *
      * @return
      */
-    public LocalDate getPlanned_start_date() {
+    public LocalDate getPlannedStartDate() {
         return planned_start_date;
     }
     
@@ -145,7 +135,7 @@ public class Action {
      *
      * @return
      */
-    public LocalDate getPlanned_finish_date() {
+    public LocalDate getPlannedFinishDate() {
         return planned_finish_date;
     }
     
@@ -153,7 +143,7 @@ public class Action {
      *
      * @return
      */
-    public LocalDate getReal_finish_date() {
+    public LocalDate getRealFinishDate() {
         return real_finish_date;
     }
     
@@ -161,7 +151,7 @@ public class Action {
      *
      * @return
      */
-    public LocalDateTime getDate_created() {
+    public LocalDateTime getDateCreated() {
         return date_created;
     }
     
@@ -169,7 +159,7 @@ public class Action {
      *
      * @return
      */
-    public LocalDateTime getDate_modified() {
+    public LocalDateTime getDateModified() {
         return date_modified;
     }
     
@@ -177,7 +167,7 @@ public class Action {
      *
      * @return
      */
-    public String getTracking_by() {
+    public String getTrackingBy() {
         return tracking_by;
     }
     
@@ -201,8 +191,8 @@ public class Action {
      *
      * @return
      */
-    public byte getDay_to_dueDate() {
-        return day_to_dueDate;
+    public byte getDaysToDueDate() {
+        return days_to_dueDate;
     }
     
     /**
@@ -225,15 +215,15 @@ public class Action {
      *
      * @param tasks_list
      */
-    public void setTasks_list(ArrayList<Task> tasks_list) {
+    public void setTasksList(ArrayList<Task> tasks_list) {
         this.tasks_list = tasks_list;
     }
     
     /**
      *
      */
-    public void setStatus() {
-        this.status = this.status.IN_PROCESS;
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
     /**
@@ -241,25 +231,21 @@ public class Action {
      * @param meeting_name
      * @param fa_name
      */
-    public void setID(String meeting_name, short inc, byte id_length) {
-        itemID = String.format("%s%0" + id_length + "d", meeting_name,
-                (int)inc + 1);
+    public void setID(int facility_id, String meeting_name, short number, byte zeros) {
+        itemID = String.format("%d%s%0" + zeros + "d", facility_id, meeting_name,
+                (int)number + 1);
+    }
+
+    public void setID(String id){
+        this.itemID = id;
     }
     
     /**
      *
-     * @param om_number
+     * @param detail
      */
-    public void setOm_number(short om_number) {
-        this.om_number = om_number;
-    }
-
-    /**
-     *
-     * @param om_detail
-     */
-    public void setOm_detail(String om_detail) {
-        this.om_detail = om_detail;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
     
     /**
@@ -282,7 +268,7 @@ public class Action {
      *
      * @param planned_start_date
      */
-    public void setPlanned_start_date(LocalDate planned_start_date) {
+    public void setPlannedStartDate(LocalDate planned_start_date) {
         this.planned_start_date = planned_start_date;
     }
     
@@ -290,7 +276,7 @@ public class Action {
      *
      * @param planned_finish_date
      */
-    public void setPlanned_finish_date(LocalDate planned_finish_date) {
+    public void setPlannedFinishDate(LocalDate planned_finish_date) {
         this.planned_finish_date = planned_finish_date;
     }
    
@@ -298,7 +284,7 @@ public class Action {
      *
      * @param real_finish_date
      */
-    public void setReal_finish_date(LocalDate real_finish_date) {
+    public void setRealFinishDate(LocalDate real_finish_date) {
         this.real_finish_date = real_finish_date;
     }
 
@@ -306,14 +292,14 @@ public class Action {
      *
      * @param date_created
      */
-    protected void setDate_created(LocalDateTime date_created) {
+    protected void setDateCreated(LocalDateTime date_created) {
         this.date_created = date_created;
     }
     
     /**
      *
      */
-    public void setDate_modified() {
+    public void setDateModified() {
         this.date_modified = LocalDateTime.now();
     }
     
@@ -321,7 +307,7 @@ public class Action {
      *
      * @param tracking_by
      */
-    public void setTracking_by(String tracking_by) {
+    public void setTrackingBy(String tracking_by) {
         this.tracking_by = tracking_by;
     }
    
@@ -345,8 +331,8 @@ public class Action {
      *
      * @param day_to_dueDate
      */
-    public void setDay_to_dueDate(byte day_to_dueDate) {
-        this.day_to_dueDate = day_to_dueDate;
+    public void setDaysToDueDate(byte days_to_dueDate) {
+        this.days_to_dueDate = days_to_dueDate;
     }
     
     /**
@@ -354,6 +340,10 @@ public class Action {
      */
     public void setDependencies() {
         this.dependencies = null;
+    }
+    
+    public boolean validateDate(String Date){
+        return true;
     }
 
 }

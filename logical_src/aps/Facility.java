@@ -13,13 +13,14 @@ import java.util.ArrayList;
  */
 public class Facility {
     //aps Class Variables 
-    private ArrayList<Collaborator> collaborators_list;
-    private ArrayList<FuntionalArea> funtional_areas;
+    private static ArrayList<Collaborator> collaborator_list;
+    private static ArrayList<FuntionalArea> funtional_areas;
     private ArrayList<Meeting> meetings;
     //************************************************************************
     private byte id;
     private String name;
     private String acronym;
+    private String city;
     
     /** 
     * Class Empty constructor.
@@ -28,8 +29,8 @@ public class Facility {
         
     }
 
-    public ArrayList<Collaborator> getCollaborators_list() {
-        return collaborators_list;
+    public ArrayList<Collaborator> getCollaboratorList() {
+        return collaborator_list;
     }
 
     public ArrayList<FuntionalArea> getFuntional_areas() {
@@ -52,11 +53,15 @@ public class Facility {
         return acronym;
     }
 
-    public void setCollaborators_list(ArrayList<Collaborator> collaborators_list) {
-        this.collaborators_list = collaborators_list;
+    public String getCity() {
+        return city;
     }
 
-    public void setFuntional_areas(ArrayList<FuntionalArea> funtional_areas) {
+    public void setCollaboratorList(ArrayList<Collaborator> collaborator_list) {
+        this.collaborator_list = collaborator_list;
+    }
+
+    public void setFuntionalAreas(ArrayList<FuntionalArea> funtional_areas) {
         this.funtional_areas = funtional_areas;
     }
 
@@ -74,5 +79,13 @@ public class Facility {
 
     public void setAcronym(String acronym) {
         this.acronym = acronym;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
+    public Meeting searchMeeting(String meeting){
+        return null;
     }
 }

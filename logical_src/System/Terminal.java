@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.*;
 import aps.*;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import javax.swing.table.DefaultTableModel;
 
 
 public class Terminal{
@@ -139,55 +141,89 @@ public class Terminal{
         
     }*/
     
-    public Object[][] getTableContent(ActionItemFilter filter) throws Exception{
-        ArrayList<Object[]> list = new ArrayList<>();
-        Object[][] o = null;
-        String id, om, detail, owner, comments, p_start_date, p_finish_date,
-                r_finish_date, progress, status, duration;
+    public DefaultTableModel getTableContent(ActionItemFilter filter, String meeting) throws Exception{
+        String id, responsible, date, status, duration;
+        ActionPlan plan = getActionPlan(meeting);
+        ArrayList<Action> list = new ArrayList();
+        DefaultTableModel dm = new DefaultTableModel(null, new String [] {
+                "id","Action Detail", "Owner", "Comments", 
+                "Planned Start Date", "Planned Finish Date", "Real Finish Date",
+                "Progress", "Status", "Duration" 
+            });
         
         if(filter.equals(ActionItemFilter.ALL)){
-            String query = "SELECT id,item_id, om_number, om_detail, comments,p_start_date, p_finish_date, r_finish_date, progress,status, duration FROM planb.actionitem;";
+            String query = "SELECT id,item_id,detail,comments,p_start_date,"
+                    + "p_finish_date, r_finish_date,progress,status,"
+                    + "duration FROM planb.action;";
             planB_DB.connection();
             ResultSet rs = planB_DB.selectQuery(query);
             if(rs != null){
                 while(rs.next()){
-                    ArrayList<Object> l = new ArrayList();
+                    Action action = new Action();
+                    Vector row = new Vector();
                     id = rs.getString("id");
-                    l.add(rs.getString("item_id"));
-                    l.add(rs.getString("om_number"));
-                    l.add(rs.getString("om_detail")) ;
-                    l.add(getOwnerAcronym(id));
-                    l.add(rs.getString("comments"));
-                    l.add(rs.getString("p_start_date"));
-                    l.add(rs.getString("p_finish_date"));
-                    l.add(rs.getString("r_finish_date"));
-                    l.add(rs.getString("progress"));
-                    l.add(getStatusName(rs.getInt("status")));
-                    l.add(rs.getString("duration"));
-                    list.add(l.toArray());
+                    row.add(rs.getString("item_id"));
+                    action.setID(rs.getString("item_id"));
+                    row.add(rs.getString("detail"));
+                    action.setDetail(rs.getString("detail"));
+                    responsible = getOwnerAcronym(id);
+                    row.add(responsible);
+                    action.setResponsible(getCollaborator(responsible));
+                    row.add(rs.getString("comments"));
+                    action.setComments(rs.getString("comments"));
+                    date = rs.getString("p_start_date");
+                    row.add(date);
+                    action.setPlannedStartDate(parseDate(date));
+                    date = rs.getString("p_finish_date");
+                    row.add(date);
+                    action.setPlannedFinishDate(parseDate(date));
+                    date = rs.getString("r_finish_date");
+                    row.add(date);
+                    action.setRealFinishDate(parseDate(date));
+                    row.add(rs.getString("progress"));
+                    action.setProgress((byte) Integer.parseInt(rs.getString("progress")));
+                    status = getStatusName(rs.getInt("status")); 
+                    row.add(status);
+                    action.setStatus(Status.valueOf(status));
+                    duration = rs.getString("duration"); 
+                    row.add(duration);
+                    if(duration == null)
+                        action.setDuration((byte)0);
+                    else
+                        action.setDuration((byte) Integer.parseInt(duration));
+                    dm.addRow(row);
+                    list.add(action);
                 }
-                o = new Object[list.size()][11];
-                for(int i=0;i<o.length;i++){
-                    for(int j=0;j<11;j++){
-                        o[i][j] = list.get(i);
-                    }
-                }
+                plan.setActionList(list);
             }
             planB_DB.disconnection();
         }
-        return o;
+        return dm;
     }
     
-    public String getOwnerAcronym(String actionItemID) throws Exception{
-        String query = "SELECT acronym_name FROM planb.collaborator INNER "
-                + "JOIN planb.collaborator_actionitem ON "
-                + "collaborator.employee_id=collaborator_actionitem.collaborator_id "
-                + "AND collaborator_actionitem.actionitem_id ="+actionItemID+";";
-        DataBase db = new DataBase();
-        db.connection();
-        ResultSet rs = db.selectQuery(query);
+    public boolean authenticate(String usrname, String pswd){
+        _user = new User();        
+        if(_user != null){
+            if(_user.getPassword().equals(pswd))
+                return true;
+            else
+                System.out.println("Wrong Password");
+        }
+        System.out.println("system Login incorrect");
+        return false;
+        
+    }
+    
+    public String getOwnerAcronym(String actionID) throws Exception{
+        String query = "SELECT acronym_name FROM planb.collaborator INNER JOIN"
+                + " planb.collaborator_action ON "
+                + "collaborator.employee_id=collaborator_action.collaborator_id"
+                + " AND collaborator_action.action_id ="+actionID+";";
+        planB_DB.connection();
+        ResultSet rs = planB_DB.selectQuery(query);
+        rs.next();
         String acronym = rs.getString("acronym_name"); 
-        db.disconnection();
+        planB_DB.disconnection();
         return acronym;
     }
     
@@ -198,6 +234,20 @@ public class Terminal{
                 return s.toString();
             }
         }
+        return null;
+    }
+    
+    public ActionPlan getActionPlan(String meeting){
+        return new ActionPlan();
+    }
+    
+    public Collaborator getCollaborator(String collaborator){
+        return null;
+    }
+    
+    public LocalDate parseDate(String date){
+        if(date != null)
+            return LocalDate.parse(date);
         return null;
     }
 }

@@ -34,11 +34,11 @@ public class APSummary {
         ta_CANCELLED = 0;
     }
 
-    public LocalDateTime getDate_modified() {
+    public LocalDateTime getDateModified() {
         return date_modified;
     }
 
-    public int getTa_CANCELLED() {
+    public int getTaCANCELLED() {
         return ta_CANCELLED;
     }
 

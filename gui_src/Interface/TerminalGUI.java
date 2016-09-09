@@ -433,9 +433,11 @@ public class TerminalGUI extends JFrame{
         
         JPanel pane = new JPanel();
         pane.setLayout(new GridBagLayout());
+        pane.setBackground(Color.decode("#FCFEFC"));
         JPanel pane2 = new JPanel();
         pane2.setLayout(new BorderLayout());
         pane2.setPreferredSize(new Dimension(300,300));
+        pane2.setBackground(Color.decode("#FCFEFC"));
         
         apLabel = new JLabel("Action Plan");
         apLabel.setFont(new Font("Dialog", 1, 24)); // NOI18N
@@ -496,7 +498,7 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 2, 2, 3);
         pane.add(meetLabel, gbc);
         
-        meetComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Comité Técnico Semanal", "Indicadores", "AFR", "Item 4" }));
+        meetComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Comité Técnico", "Indicadores", "AFR" }));
         meetComboBox.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(204, 204, 204), null, null));
         meetComboBox.setMaximumSize(new Dimension(150, 24));
         meetComboBox.setPreferredSize(new Dimension(150, 24));
@@ -588,17 +590,12 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 4, 3, 2);
         pane.add(owContentLabel, gbc);
         
-        jTable1.setModel(new DefaultTableModel(APSys.getTerminal().getTableContent(ActionItemFilter.ALL)
-            ,
-            new String [] {
-                "id", "OM", "Action Detail", "Owner", "Comments", 
-                "Planned Start Date", "Planned Finish Date", "Real Finish Date",
-                "Progress", "Status", "Duration" 
-            }
-        ));
+        jTable1.setModel(APSys.getTerminal().getTableContent(ActionItemFilter.ALL, "CT"));
         jTable1.setMinimumSize(new Dimension(300, 200));
+        jTable1.setBackground(Color.decode("#FCFEFC"));
         jScrollPane2 = new JScrollPane();
         jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setBackground(Color.decode("#FCFEFC"));
         pane2.add(jScrollPane2, BorderLayout.CENTER);
         
         compContentLabel = new JLabel("56");
@@ -714,6 +711,7 @@ public class TerminalGUI extends JFrame{
         modifyPanel.setLayout(new FlowLayout());
         modifyPanel.add(addAction);
         modifyPanel.add(editAction);
+        modifyPanel.setBackground(Color.decode("#FCFEFC"));
         pane2.add(modifyPanel, BorderLayout.EAST);
         actionPlanPanel.add(pane, BorderLayout.NORTH);
         actionPlanPanel.add(pane2, BorderLayout.CENTER);

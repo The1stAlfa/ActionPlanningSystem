@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,7 +31,6 @@ public class DataBase {
     public void DataBase(){
     }
     
-    /*METODO CONECTAR*/
    
     public boolean connection ()throws Exception{
         try {
@@ -41,12 +41,10 @@ public class DataBase {
         try{
             this.con = DriverManager.getConnection("jdbc:" + DBMS + "://" 
                     + HOST + ":" + PORT + "/" + DATABASE, USER, PASSWORD);                                
-            System.out.println("CONEXION EXITOSA CON LA BASE DE DATOS");
             return true;
         }
-        catch(SQLException exception){
-            System.out.println("ERROR: NO SE PUDO CONECTAR CON LA BASE " 
-                    + "DE DATOS: "+exception);
+        catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,ex);
             return false;
         }
     }

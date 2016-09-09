@@ -5,6 +5,7 @@
  */
 package System;
 
+import Interface.LoginForm;
 import Interface.SplashWindow;
 import Interface.TerminalGUI;
 import Interface.WLogin;
@@ -44,13 +45,15 @@ public class APSys {
             public void run(){            
                 SplashWindow w = new SplashWindow("gui_src\\images\\planB-182x263.png", 
                 new Frame(), 2500);
-                //WLogin loginWindow = new WLogin();
+                LoginForm login = new LoginForm();
                 try {
                     UIManager.setLookAndFeel(
                             "javax.swing.plaf.metal.MetalLookAndFeel");
                           // "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
                         //UIManager.getCrossPlatformLookAndFeelClassName());
+                    login.setVisible(true);
                     deploySystem(null);
+                    
                 } catch (Exception ex) {
                     System.out.println("MAL");
                     ex.printStackTrace();
@@ -81,9 +84,10 @@ public class APSys {
      * @param user
      */
     public static void deploySystem(User user) throws IOException, FontFormatException{
-        //APSys.terminal_APSys.setUser(user);
+        //terminal_APSys.setUser(user);
         try{
-            APSys.terminalGUI_APSys = new TerminalGUI();
+            terminalGUI_APSys = new TerminalGUI();
+            
         }
         catch(Exception e){
             e.printStackTrace();

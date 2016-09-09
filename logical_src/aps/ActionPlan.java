@@ -17,21 +17,21 @@ public class ActionPlan {
     //aps Class Variables
     private APSummary summary;
     private Collaborator owner;
-    private ArrayList<Action> actions_list;       
+    private ArrayList<Action> action_list;       
    //************************************************************************ 
     private short id;
     private LocalDateTime date_created;
     private LocalDateTime date_modified;
     private LocalDateTime current_date;
     private byte execution; // Action Plan porcentage of execution
-    private short action_increment;
-    private byte id_length;
+    private short last_action_number;
+    private byte zeros;
     
     /**
      *
      */
     public ActionPlan(){
-        this.actions_list = new ArrayList<>();
+        this.action_list = new ArrayList<>();
     }
 
     /**
@@ -44,7 +44,7 @@ public class ActionPlan {
         this.owner = owner;
         this.date_created = LocalDateTime.now();
         this.summary = summary;
-        actions_list = null;
+        action_list = null;
     }
 
     public APSummary getSummary() {
@@ -55,23 +55,23 @@ public class ActionPlan {
         return owner;
     }
 
-    public ArrayList<Action> getActions_list() {
-        return actions_list;
+    public ArrayList<Action> getActionList() {
+        return action_list;
     }
 
     public short getId() {
         return id;
     }
 
-    public LocalDateTime getDate_created() {
+    public LocalDateTime getDateCreated() {
         return date_created;
     }
 
-    public LocalDateTime getDate_modified() {
+    public LocalDateTime getDateModified() {
         return date_modified;
     }
 
-    public LocalDateTime getCurrent_date() {
+    public LocalDateTime getCurrentDate() {
         return current_date;
     }
 
@@ -79,12 +79,12 @@ public class ActionPlan {
         return execution;
     }
 
-    public short getAction_increment() {
-        return action_increment;
+    public short getLastActionNumber() {
+        return last_action_number;
     }
     
-    public byte getId_length() {
-        return id_length;
+    public byte getZeros() {
+        return zeros;
     }
     
     public void setSummary(APSummary summary) {
@@ -95,23 +95,23 @@ public class ActionPlan {
         this.owner = owner;
     }
 
-    public void setActions_list(ArrayList<Action> actions_list) {
-        this.actions_list = actions_list;
+    public void setActionList(ArrayList<Action> action_list) {
+        this.action_list = action_list;
     }
 
     public void setId(short id) {
         this.id = id;
     }
 
-    public void setDate_created(LocalDateTime date_created) {
+    public void setDateCreated(LocalDateTime date_created) {
         this.date_created = date_created;
     }
 
-    public void setDate_modified(LocalDateTime date_modified) {
+    public void setDateModified(LocalDateTime date_modified) {
         this.date_modified = date_modified;
     }
 
-    public void setCurrent_date(LocalDateTime current_date) {
+    public void setCurrentDate(LocalDateTime current_date) {
         this.current_date = current_date;
     }
 
@@ -119,31 +119,30 @@ public class ActionPlan {
         this.execution = execution;
     }    
 
-    public void setAction_increment(short action_increment) {
-        this.action_increment = action_increment;
+    public void setLastActionNumber(short number) {
+        this.last_action_number = number;
     }
     
-    public void setId_length(byte id_length) {
-        this.id_length = id_length;
+    public void setZeros(byte zeros) {
+        this.zeros = zeros;
     }
     
-    public Action searchActionItem(String key){
-        Optional<Action> a = actions_list.stream()
+    public Action searchAction(String key){
+        Optional<Action> a = action_list.stream()
         .filter(p -> p.getID().equals(key))
         .findFirst();
         return a.isPresent() ? a.get() : null;
         //return null;
     }
     
-    public boolean insertActionItem(Action action){
-        actions_list.add(action);
-        action_increment += (short) 1;
+    public boolean insertAction(Action action){
+        action_list.add(action);
+        last_action_number += (short) 1;
         return true;
     }
     
     //Overload Method
-    public ArrayList<Action> searchActionItems(ActionItemFilter filter, 
-            int key){
+    public ArrayList<Action> searchAction(ActionItemFilter filter, int key){
         if(filter.equals(ActionItemFilter.BY_DURATION)){
             
         }

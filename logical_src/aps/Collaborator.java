@@ -11,7 +11,7 @@ package aps;
  */
 public class Collaborator {
     //aps Class Variables 
-    private FuntionalArea f_area; // Example: Production, Accounting
+    private FuntionalArea funtional_area; // Example: Production, Accounting
     //************************************************************************
     private String acronym_name; // This variable is exposed in the Action Plan
     private String charge;       // where the collaborator belongs.
@@ -38,14 +38,14 @@ public class Collaborator {
         this.firstName = firstName;
         this.lastName = lastName;
         this.charge = charge;
-        setAcronym_name();
+        setAcronymName();
     }
 
-    public FuntionalArea getF_area() {
-        return f_area;
+    public FuntionalArea getFuntionalArea() {
+        return funtional_area;
     }
 
-    public String getAcronym_name() {
+    public String getAcronymName() {
         return acronym_name;
     }
     
@@ -53,7 +53,7 @@ public class Collaborator {
         return charge;
     }
 
-    public short getEmployee_id() {
+    public short getEmployeeId() {
         return employee_id;
     }
     
@@ -65,11 +65,11 @@ public class Collaborator {
         return lastName;
     }
     
-    public void setF_area(FuntionalArea f_area) {
-        this.f_area = f_area;
+    public void setFuntionalArea(FuntionalArea funtional_area) {
+        this.funtional_area = funtional_area;
     }
 
-    private void setAcronym_name(){
+    private void setAcronymName(){
         acronym_name = firstName.substring(0,1);
         String[] names = lastName.split(" ");
         for(String name:names)
@@ -80,7 +80,7 @@ public class Collaborator {
         this.charge = charge;
     }
 
-    public void setEmployee_id(short employee_id) {
+    public void setEmployeeId(short employee_id) {
         this.employee_id = employee_id;
     }
     
