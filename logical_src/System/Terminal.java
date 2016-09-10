@@ -15,8 +15,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import aps.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -27,7 +32,7 @@ public class Terminal{
     private final Scanner console;
     private final int LINE_JUMPS = 100;
     private DataBase planB_DB;
-    
+    private static final String SALT = "MtO27:37";
     
     public Terminal() throws Exception {
         _RANDOM = new Random();
@@ -55,63 +60,6 @@ public class Terminal{
         return _user;
     }
     
-    /*
-    public User searchUser(String usrname){
-        User temp_usr = new User();
-        FileReader usrDB;
-	String record = null,file = "database/userMap.txt";
-		StringTokenizer usr_seek;
-		{	try{
-				usrDB = new FileReader(file);//Abre el archivo
-				BufferedReader br = new BufferedReader(usrDB);//Crea un objeto para leer el archivo
-				while((record=br.readLine())!= null){
-					usr_seek = new StringTokenizer(record,";");
-					temp_usr.setUsername(usr_seek.nextToken());
-                                        if(temp_usr.getUsername().equalsIgnoreCase(usrname)){
-                                            temp_usr.setId(Integer.parseInt(usr_seek.nextToken()));
-                                            usrDB.close();
-                                            break;
-                                        }
-                                        else
-                                            usr_seek.nextToken();				
-				}
-				usrDB.close();
-                                if(temp_usr.getId()!= 0){
-                                        try{
-                                            file = "database/user.txt";
-                                            usrDB = new FileReader(file);
-                                            br = new BufferedReader(usrDB);
-                                            while((record=br.readLine())!= null){
-                                                usr_seek = new StringTokenizer(record,";");
-                                                if(temp_usr.getId() == Integer.parseInt(usr_seek.nextToken())){
-                                                    temp_usr.setUsername(usr_seek.nextToken());
-                                                    temp_usr.setPassword(usr_seek.nextToken());
-                                                    temp_usr.setRole(usr_seek.nextToken());
-                                                    temp_usr.setAccess_list(defineAccessList(usr_seek.nextToken()));
-                                                    temp_usr.setEmployee_id(Byte.parseByte(usr_seek.nextToken()));
-                                                    usrDB.close();
-                                                    break;
-                                                }
-                                                else
-                                                    usr_seek.nextToken();				
-                                            }
-                                            usrDB.close();
-                                        }
-                                        catch(IOException e){
-                                            temp_usr = null;
-                                            System.out.println("Database fail connection");
-                                        }
-                                }
-                                else
-                                    temp_usr = null;
-			}
-			catch(IOException e){
-				temp_usr = null;
-			}
-		}
-        return temp_usr;
-    }
-    */
     public ArrayList<String> defineAccessList(String accesses){
         ArrayList<String> _list = new ArrayList();
 	char comparator = '-';
@@ -126,20 +74,42 @@ public class Terminal{
 		
                 return _list;
     }
-   /* 
-    public boolean authenticate(String usrname, String pswd){
-        
-        _user = searchUser(usrname);        
-        if(_user != null){
-            if(_user.getPassword().equals(pswd))
-                return true;
-            else
-                System.out.println("Wrong Password");
+   
+    public boolean login(String username, String password) throws NoSuchAlgorithmException, SQLException, Exception{
+        boolean isAuthenticated = false;
+        int count;
+        String saltedPassword = SALT + password;
+        String hashedPassword = generateHash(saltedPassword);
+
+        String query = "SELECT COUNT(*) AS is_user FROM planb.user WHERE username='"
+                +username+"' AND password='"+hashedPassword+"';";
+        planB_DB.connection();
+        ResultSet rs = planB_DB.selectQuery(query);
+        rs.next();
+        count = rs.getInt("is_user");
+        if(count == 1){
+            _user = new User();
+            isAuthenticated = true;
+            query = "SELECT email,role from planb.user where username='"+username+"';";
+            rs = planB_DB.selectQuery(query);
+            rs.next();
+            _user.setUsername(username);
+            _user.setEmail(rs.getString("email"));
+            _user.setRole(getRole(rs.getInt("role")));
+            query = "SELECT collaborator_id FROM planb.user_collaborator WHERE username='"+username+"';";
+            rs = planB_DB.selectQuery(query);
+            rs.next();
+            _user.setEmployeeId((short) rs.getInt("collaborator_id"));
         }
-        System.out.println("system Login incorrect");
+        planB_DB.disconnection();
+        return isAuthenticated;
+    }
+    
+    public boolean signup(String username, String password) throws NoSuchAlgorithmException{
+        String saltedPassword = SALT + password;
+        String hashedPassword = generateHash(saltedPassword);
         return false;
-        
-    }*/
+    }
     
     public DefaultTableModel getTableContent(ActionItemFilter filter, String meeting) throws Exception{
         String id, responsible, date, status, duration;
@@ -201,19 +171,6 @@ public class Terminal{
         return dm;
     }
     
-    public boolean authenticate(String usrname, String pswd){
-        _user = new User();        
-        if(_user != null){
-            if(_user.getPassword().equals(pswd))
-                return true;
-            else
-                System.out.println("Wrong Password");
-        }
-        System.out.println("system Login incorrect");
-        return false;
-        
-    }
-    
     public String getOwnerAcronym(String actionID) throws Exception{
         String query = "SELECT acronym_name FROM planb.collaborator INNER JOIN"
                 + " planb.collaborator_action ON "
@@ -230,9 +187,8 @@ public class Terminal{
     public String getStatusName(int status){
         Status st[] = Status.values();
         for(Status s:st){
-            if(s.getValue()==status){
+            if(s.getValue()==status)
                 return s.toString();
-            }
         }
         return null;
     }
@@ -248,6 +204,25 @@ public class Terminal{
     public LocalDate parseDate(String date){
         if(date != null)
             return LocalDate.parse(date);
+        return null;
+    }
+    
+    private static String generateHash(String input) throws NoSuchAlgorithmException{
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte[] result = mDigest.digest(input.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < result.length; i++)
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        
+        return sb.toString();
+    }
+    
+    private Role getRole(int role){
+        Role r[] = Role.values();
+        for(Role _r:r){
+            if(_r.getValue() == role)
+                return _r;
+        }
         return null;
     }
 }

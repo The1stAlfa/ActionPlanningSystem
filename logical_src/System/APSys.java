@@ -52,8 +52,6 @@ public class APSys {
                           // "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
                         //UIManager.getCrossPlatformLookAndFeelClassName());
                     login.setVisible(true);
-                    deploySystem(null);
-                    
                 } catch (Exception ex) {
                     System.out.println("MAL");
                     ex.printStackTrace();
@@ -83,11 +81,9 @@ public class APSys {
      *
      * @param user
      */
-    public static void deploySystem(User user) throws IOException, FontFormatException{
-        //terminal_APSys.setUser(user);
+    public static void initSystem() throws IOException, FontFormatException{
         try{
             terminalGUI_APSys = new TerminalGUI();
-            
         }
         catch(Exception e){
             e.printStackTrace();

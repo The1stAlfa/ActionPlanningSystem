@@ -10,9 +10,15 @@ import System.User;
 import java.awt.Dimension;
 import java.awt.FontFormatException;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
@@ -21,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -186,13 +193,30 @@ public class LoginForm extends JFrame {
         );
 
         loginButton.setBackground(new java.awt.Color(252, 67, 68));
-        loginButton.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        loginButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         loginButton.setForeground(new java.awt.Color(48, 49, 50));
         loginButton.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         loginButton.setText("LOGIN");
         loginButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         loginButton.setPreferredSize(new java.awt.Dimension(200, 26));
         loginButton.setOpaque(true);
+        loginButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                try {
+                    loginButtonActionPerformed();
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (FontFormatException ex) {
+                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
 
         feedbackLabel.setBackground(new java.awt.Color(48, 49, 50));
         feedbackLabel.setForeground(new java.awt.Color(252, 254, 252));
@@ -266,36 +290,25 @@ public class LoginForm extends JFrame {
         pack();
     }
     
-    private void initSystem(User user) throws IOException, FontFormatException{
-        this.dispose();
-        APSys.deploySystem(user);
-    }
-    
-    /*
-    private void validateDataInput(){
+    private void loginButtonActionPerformed() throws NoSuchAlgorithmException, SQLException, IOException, FontFormatException, Exception{
         if(!(usernameTextField.getText().isEmpty())){
             if(!(String.valueOf(passwordField.getPassword()).isEmpty())){
-                if(APSys.getTerminal().authenticate(usernameTextField.getText(), String.valueOf(passwordField.getPassword())))
-                    initSystem(APSys.getTerminal().searchUser(usernameTextField.getText()));
-                else if(checkLabel.isVisible()){
-                    passwordTF.setText(null);
-                    goOnLabel.setVisible(false);
-                    JOptionPane.showMessageDialog(null,"Password Incorrect.","Error",JOptionPane.ERROR_MESSAGE);
+                if(APSys.getTerminal().login(usernameTextField.getText(), String.valueOf(passwordField.getPassword())))
+                    this.dispose();
+                    APSys.initSystem();
                 }
                 else{
-                    usernameTF.setText(null);
-                    checkLabel.setVisible(false);
-                    passwordTF.setText(null);
-                    goOnLabel.setVisible(false);
+                    usernameTextField.setText(null);
+                    //checkLabel.setVisible(false);
+                    passwordField.setText(null);
+                    //goOnLabel.setVisible(false);
                     JOptionPane.showMessageDialog(null,"Username or Password Incorrect.","Error",JOptionPane.ERROR_MESSAGE);
                 }
-            }
         }
         else{
-            if((String.valueOf(passwordTF.getPassword()).isEmpty()))
-                goOnLabel.setVisible(false);
-            JOptionPane.showMessageDialog(usernameTF,"Data Input Invalid. Username is Empty.","Error",JOptionPane.ERROR_MESSAGE);
+            if((String.valueOf(passwordField.getPassword()).isEmpty()))
+                passwordField.setText("PASSWORD");
+            JOptionPane.showMessageDialog(usernamePanel,"Error! Username field is Empty.","Error",JOptionPane.ERROR_MESSAGE);
         }
     }
-    */
 }
