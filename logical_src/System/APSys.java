@@ -83,6 +83,7 @@ public class APSys {
      */
     public static void initSystem() throws IOException, FontFormatException{
         try{
+            terminal_APSys.loadBusinessInformation();
             terminalGUI_APSys = new TerminalGUI();
         }
         catch(Exception e){

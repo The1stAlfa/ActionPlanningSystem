@@ -17,7 +17,7 @@ public class Facility {
     private static ArrayList<FuntionalArea> funtional_areas;
     private ArrayList<Meeting> meetings;
     //************************************************************************
-    private byte id;
+    private String id;
     private String name;
     private String acronym;
     private String city;
@@ -41,7 +41,7 @@ public class Facility {
         return meetings;
     }
 
-    public byte getId() {
+    public String getId() {
         return id;
     }
 
@@ -69,7 +69,7 @@ public class Facility {
         this.meetings = meetings;
     }
 
-    public void setId(byte id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -17,9 +17,11 @@ import java.util.*;
 import aps.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -75,6 +77,30 @@ public class Terminal{
                 return _list;
     }
    
+    public void loadBusinessInformation() throws Exception{
+        String query;
+        Facility facility = new Facility();
+        
+        query = "SELECT facility.facility_id, name, acronym, city "
+                + "FROM planb.facility INNER JOIN planb.facility_collaborator ON "
+                + "facility.facility_id = facility_collaborator.facility_id "
+                + "AND collaborator_id="+(int)_user.getEmployeeId()+";";
+        planB_DB.connection();
+        ResultSet rs = planB_DB.selectQuery(query);
+        if(rs != null){
+            facility.setId(rs.getString("facility_id"));
+            facility.setName(rs.getString("name"));
+            facility.setAcronym(rs.getString("acronym"));
+            facility.setCity(rs.getString("city"));
+            facility.setCollaboratorList(getCollaborators(facility.getId()));
+            getMeetings(facility.getId());
+            APSys.org.getFacilities().add(facility);
+            
+        }
+        planB_DB.disconnection();
+        
+    }
+    
     public boolean login(String username, String password) throws NoSuchAlgorithmException, SQLException, Exception{
         boolean isAuthenticated = false;
         int count;
@@ -85,22 +111,24 @@ public class Terminal{
                 +username+"' AND password='"+hashedPassword+"';";
         planB_DB.connection();
         ResultSet rs = planB_DB.selectQuery(query);
-        rs.next();
-        count = rs.getInt("is_user");
-        if(count == 1){
-            _user = new User();
-            isAuthenticated = true;
-            query = "SELECT email,role from planb.user where username='"+username+"';";
-            rs = planB_DB.selectQuery(query);
+       if(rs != null){
             rs.next();
-            _user.setUsername(username);
-            _user.setEmail(rs.getString("email"));
-            _user.setRole(getRole(rs.getInt("role")));
-            query = "SELECT collaborator_id FROM planb.user_collaborator WHERE username='"+username+"';";
-            rs = planB_DB.selectQuery(query);
-            rs.next();
-            _user.setEmployeeId((short) rs.getInt("collaborator_id"));
-        }
+            count = rs.getInt("is_user");
+            if(count == 1){
+                _user = new User();
+                isAuthenticated = true;
+                query = "SELECT email,role from planb.user where username='"+username+"';";
+                rs = planB_DB.selectQuery(query);
+                rs.next();
+                _user.setUsername(username);
+                _user.setEmail(rs.getString("email"));
+                _user.setRole(getRole(rs.getInt("role")));
+                query = "SELECT collaborator_id FROM planb.user_collaborator WHERE username='"+username+"';";
+                rs = planB_DB.selectQuery(query);
+                rs.next();
+                _user.setEmployeeId((short) rs.getInt("collaborator_id"));
+            }
+       }
         planB_DB.disconnection();
         return isAuthenticated;
     }
@@ -222,6 +250,68 @@ public class Terminal{
         for(Role _r:r){
             if(_r.getValue() == role)
                 return _r;
+        }
+        return null;
+    }
+    
+    private ArrayList getCollaborators(String id) throws SQLException{
+        int collaborator_id,count=0;
+        String query;
+        Array result;
+        ArrayList<Collaborator> list = new ArrayList<>();
+        
+        query = "SELECT collaborator_id FROM planb.facility_collaborator where facility_id='"+id+"';";
+        ResultSet rs = planB_DB.selectQuery(query);
+        if(rs != null){
+            result = rs.getArray("collaborator_id");
+            int [] collaborators = (int[])result.getArray();
+            while(count == collaborators.length){
+                collaborator_id = collaborators[count];
+                query = "SELECT firstname, middlename,lastname,acronym_name,charge FROM planb.collaborator where employee_id="+collaborator_id+";";
+                rs = planB_DB.selectQuery(query);
+                while(rs.next()){
+                    Collaborator collaborator = new Collaborator();
+                    collaborator.setEmployeeId((short)collaborator_id);
+                    collaborator.setFirstName(rs.getString("firstname"));
+                    collaborator.setMiddleName(rs.getString("middlename"));
+                    collaborator.setLastName(rs.getString("lastname"));
+                    collaborator.setCharge(rs.getString("charge"));
+                    list.add(collaborator);                
+                }
+                count++;
+            }
+            return list;
+        }
+        return null;
+    }
+    
+    private ArrayList getMeetings(String id) throws SQLException{
+        int meeting_id,count=0;
+        String query;
+        Array result;
+        ArrayList<Meeting> list = new ArrayList<>();
+        
+        query = "SELECT meeting_id FROM planb.facility_meeting where facility_id='"+id+"';";
+        ResultSet rs = planB_DB.selectQuery(query);
+        if(rs != null){
+            result = rs.getArray("meeting_id");
+            int [] meetings = (int[])result.getArray();
+            while(count == meetings.length){
+                meeting_id = meetings[count];
+                query = "SELECT name,acronym,purpose,date_created,date_modified FROM planb.meeting where meeting_id="+meeting_id+";";
+                rs = planB_DB.selectQuery(query);
+                while(rs.next()){
+                    Meeting meeting = new Meeting();
+                    meeting.setName(rs.getString("name"));
+                    meeting.setAcronym(rs.getString("acronym"));
+                    meeting.setPurpose(rs.getString("purpose"));
+                    meeting.setDateCreated(LocalDateTime.parse(rs.getString("date_created")));
+                    meeting.setDateModified(LocalDateTime.parse(rs.getString("date_modified")));
+
+                }
+                count++;
+            }
+            return list;
         }
         return null;
     }

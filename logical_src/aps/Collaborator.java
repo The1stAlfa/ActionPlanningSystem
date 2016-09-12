@@ -17,6 +17,7 @@ public class Collaborator {
     private String charge;       // where the collaborator belongs.
     private short employee_id;
     private String firstName;
+    private String middlename;
     private String lastName;
     
     /** 
@@ -61,6 +62,10 @@ public class Collaborator {
         return firstName;
     }
 
+    public String getMiddleName(){
+        return this.middlename;
+    }
+    
     public String getLastName() {
         return lastName;
     }
@@ -86,6 +91,10 @@ public class Collaborator {
     
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+    
+    public void setMiddleName(String middlename){
+        this.middlename = middlename;
     }
 
     public void setLastName(String lastName) {

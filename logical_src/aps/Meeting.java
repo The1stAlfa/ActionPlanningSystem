@@ -23,8 +23,12 @@ public class Meeting {
     private String name;
     private String acronym;
     private String purpose;
-    private LocalDate date_created;
+    private LocalDateTime date_created;
     private LocalDateTime date_modified;
+    
+    public Meeting(){
+        
+    }
     
     /** 
     * Class Empty constructor.
@@ -100,7 +104,7 @@ public class Meeting {
      *
      * @return
      */
-    public LocalDate getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return date_created;
     }
 
@@ -164,7 +168,7 @@ public class Meeting {
      *
      * @param date_created
      */
-    public void setDateCreated(LocalDate date_created) {
+    public void setDateCreated(LocalDateTime date_created) {
         this.date_created = date_created;
     }
 
