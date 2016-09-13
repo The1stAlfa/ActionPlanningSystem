@@ -39,6 +39,14 @@ public class Organization {
     public String getName() {
         return brand_name;
     }   
+    
+    public Facility getFacility(String id){
+        for(Facility facility:facilities){
+            if(facility.getId().equalsIgnoreCase(id))
+                return facility;
+        }
+        return null;
+    }
 
     /**
      *

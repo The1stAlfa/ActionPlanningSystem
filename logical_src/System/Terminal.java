@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -30,18 +31,10 @@ import javax.swing.table.DefaultTableModel;
 public class Terminal{
     private byte id;
     private User _user;
-    private final Random _RANDOM;
-    private final Scanner console;
-    private final int LINE_JUMPS = 100;
     private DataBase planB_DB;
     private static final String SALT = "MtO27:37";
     
     public Terminal() throws Exception {
-        _RANDOM = new Random();
-        this.id = (byte)_RANDOM.nextInt();
-        if(this.id<0)
-            id = (byte)(id *(-1));
-        this.console = new Scanner(System.in);
         _user = new User();
         planB_DB = new DataBase();
         boolean j = planB_DB.connection();
@@ -266,7 +259,7 @@ public class Terminal{
                 rs = planB_DB.selectQuery(query);
                 while(rs.next()){
                     Collaborator collaborator = new Collaborator();
-                    collaborator.setEmployeeId((short)collaborator_id);
+                    collaborator.setEmployeeId(collaborator_id);
                     collaborator.setFirstName(rs.getString("firstname"));
                     collaborator.setMiddleName(rs.getString("middlename"));
                     collaborator.setLastName(rs.getString("lastname"));
@@ -280,27 +273,26 @@ public class Terminal{
         return null;
     }
     
-    private ArrayList getMeetings(String id) throws SQLException{
+    private ArrayList getMeetings(String facility_id) throws SQLException{
         int count=0;
         String query;
-        Array result;
+        Object[] result;
         ArrayList<Meeting> list = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         
-        query = "SELECT meeting_id FROM planb.facility_meeting where facility_id='"+id+"';";
-        ResultSet rs = planB_DB.selectQuery(query);
-        if(rs != null){
-            result = rs.getArray("meeting_id");
-            int [] meetings = (int[])result.getArray();
-            query = "SELECT name,acronym,purpose,date_created,date_modified FROM planb.meeting where meeting_id="+meetings[count]+";";
-            rs = planB_DB.selectQuery(query);
-            while(rs.next()){
+        result = getMeetingIds(facility_id);      
+        if(result != null){
+            while(count != result.length){
+                query = "SELECT name,acronym,purpose,date_created FROM planb.meeting"
+                        + " where meeting_id="+(int)result[count]+";";
+                ResultSet rs = planB_DB.selectQuery(query);
+                rs.next();
                 Meeting meeting = new Meeting();
                 meeting.setName(rs.getString("name"));
                 meeting.setAcronym(rs.getString("acronym"));
                 meeting.setPurpose(rs.getString("purpose"));
-                meeting.setDateCreated(LocalDateTime.parse(rs.getString("date_created")));
-                meeting.setDateModified(LocalDateTime.parse(rs.getString("date_modified")));
-                meeting.setPlan(getActionPlan(meetings[count]));
+                meeting.setDateCreated(LocalDateTime.parse(rs.getString("date_created").substring(0,19),formatter));
+                meeting.setPlan(getActionPlan(Integer.parseInt(result[count].toString())));
                 list.add(meeting);   
                 count++;
             }
@@ -309,19 +301,20 @@ public class Terminal{
         return null;
     }
     
-    private ActionPlan getActionPlan(int id) throws SQLException{
+    private ActionPlan getActionPlan(int meeting_id) throws SQLException{
         String query;
         ActionPlan action_plan = new ActionPlan();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         query = "SELECT id, date_created, date_modified, execution "
                 + "FROM planb.actionplan INNER JOIN  planb.meeting_actionplan "
-                + "ON id=actionplan_id AND meeting_id='"+id+"';";
-     
+                + "ON id=actionplan_id AND meeting_id='"+meeting_id+"';";
+
         ResultSet rs = planB_DB.selectQuery(query);
         if(rs != null){
             rs.next();
             action_plan.setId((short) rs.getInt("id"));
-            action_plan.setDateCreated(LocalDateTime.parse(rs.getString("date_created")));
-            action_plan.setDateModified(LocalDateTime.parse(rs.getString("date_modified")));
+            action_plan.setDateCreated(LocalDateTime.parse(rs.getString("date_created").substring(0,19), formatter));
+            action_plan.setDateModified(LocalDateTime.parse(rs.getString("date_modified").substring(0,19), formatter));
             action_plan.setExecution((byte)rs.getInt("execution"));
             query = "SELECT date_modified, actions, actions_cancelled,"
                 + "actions_completed_after_app,actions_completed_app,"
@@ -332,7 +325,7 @@ public class Terminal{
             if(rs != null){
                 rs.next();
                 APSummary apsumary = new APSummary();
-                apsumary.setDate_modified(LocalDateTime.parse(rs.getString("date_modified")));
+                apsumary.setDate_modified(LocalDateTime.parse(rs.getString("date_modified").substring(0,19), formatter));
                 apsumary.setActions(rs.getInt("actions"));
                 apsumary.setActionsCompletedAfterApp(rs.getInt("actions_completed_after_app"));
                 apsumary.setActionsCompletedApp(rs.getInt("actions_completed_app"));
@@ -346,10 +339,11 @@ public class Terminal{
                         + "acronym_name, charge FROM planb.collaborator INNER JOIN"
                         + " planb.collaborator_actionplan ON "
                         + "employee_id=collaborator_id AND actionplan_id="+(int)action_plan.getId()+";";
+                rs = planB_DB.selectQuery(query);
                 if(rs != null){
                     rs.next();
                     Collaborator owner = new Collaborator();
-                    owner.setEmployeeId((short)rs.getInt("employee_id"));
+                    owner.setEmployeeId(rs.getInt("employee_id"));
                     owner.setFirstName(rs.getString("firstname"));
                     owner.setMiddleName(rs.getString("middlename"));
                     owner.setLastName(rs.getString("lastname"));
@@ -359,8 +353,26 @@ public class Terminal{
                     action_plan.setCurrentDate(LocalDateTime.now());
                 }
             }
-    
+            return action_plan;
         }
         return null;
+    }
+    
+    private Object[] getMeetingIds(String facility_id) throws SQLException{
+        String query;
+        ArrayList list = new ArrayList();
+        
+        query = "SELECT meeting_id FROM planb.facility_meeting where facility_id='"+facility_id+"';";
+        ResultSet rs = planB_DB.selectQuery(query);
+        if(rs != null){
+            while(rs.next())
+                list.add(rs.getInt("meeting_id"));
+            return list.toArray();
+        }
+        return null;
+    }
+    
+    public Object[] getMeetingsNames(){
+        return APSys.org.getFacility("01").getMeetingsNames().toArray();
     }
 }

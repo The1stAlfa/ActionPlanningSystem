@@ -498,10 +498,11 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 2, 2, 3);
         pane.add(meetLabel, gbc);
         
-        meetComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Comité Técnico", "Indicadores", "AFR" }));
+        meetComboBox.setModel(new DefaultComboBoxModel<>(APSys.getTerminal().getMeetingsNames()));
         meetComboBox.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(204, 204, 204), null, null));
         meetComboBox.setMaximumSize(new Dimension(150, 24));
         meetComboBox.setPreferredSize(new Dimension(150, 24));
+        meetComboBox.setSelectedIndex(-1);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;

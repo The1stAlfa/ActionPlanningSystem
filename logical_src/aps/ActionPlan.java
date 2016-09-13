@@ -121,9 +121,9 @@ public class ActionPlan {
     
     public void setZeros(int number){
         String n = String.valueOf(number); 
-        if(number == initial_zeros)
+        if(n.length() == initial_zeros)
             this.zeros = (byte)(initial_zeros+(byte)1);
-        else if(number > initial_zeros)
+        else if(n.length() > initial_zeros)
             this.zeros = (byte)(n.length()+1);
         else
             this.zeros = (byte)(initial_zeros - (byte)n.length());

@@ -56,6 +56,13 @@ public class Facility {
     public String getCity() {
         return city;
     }
+    
+    public ArrayList getMeetingsNames(){
+        ArrayList s = new ArrayList();
+        for(Meeting meeting:meetings)
+            s.add(meeting.getName());
+        return s;
+    }
 
     public void setCollaboratorList(ArrayList<Collaborator> collaborator_list) {
         this.collaborator_list = collaborator_list;
