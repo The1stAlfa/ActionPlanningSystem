@@ -23,10 +23,14 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -85,7 +89,7 @@ public class TerminalGUI extends JFrame{
     private JLabel apsLogoLabel, resizeLabel, minimizeLabel, closeLabel;
     public JLabel hallLabel, movieLabel, aboutLabel, settingsLabel, userLabel;
     private JLabel initImageLabel;
-    private String resource;
+    private String resource, meetingName;
     private boolean menuFlag = false, resizeFlag = false;
 
        
@@ -503,6 +507,16 @@ public class TerminalGUI extends JFrame{
         meetComboBox.setMaximumSize(new Dimension(150, 24));
         meetComboBox.setPreferredSize(new Dimension(150, 24));
         meetComboBox.setSelectedIndex(-1);
+        meetComboBox.addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent event){
+                meetingSelected(event);
+                try {
+                    jTable1.setModel(APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName));
+                } catch (Exception ex) {
+                    Logger.getLogger(TerminalGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -591,7 +605,11 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 4, 3, 2);
         pane.add(owContentLabel, gbc);
         
-        jTable1.setModel(APSys.getTerminal().getTableContent(ActionItemFilter.ALL, "CT"));
+        jTable1.setModel(new DefaultTableModel(null, new String [] {
+                "id","Action Detail", "Owner", "Comments", 
+                "Planned Start Date", "Planned Finish Date", "Real Finish Date",
+                "Progress", "Status", "Duration" 
+            }));
         jTable1.setMinimumSize(new Dimension(300, 200));
         jTable1.setBackground(Color.decode("#FCFEFC"));
         jScrollPane2 = new JScrollPane();
@@ -774,5 +792,9 @@ public class TerminalGUI extends JFrame{
             //Handle exception
             System.out.println("MAL");
         }
+    }
+    
+    private void meetingSelected(ItemEvent event){
+        event.getItem().toString();
     }
 }

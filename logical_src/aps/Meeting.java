@@ -18,7 +18,7 @@ public class Meeting {
     //aps Class Variables 
     private ArrayList<Collaborator> adt_participants; //aditional partcipants
     private WorkTeam team; 
-    private ActionPlan plan;
+    private ActionPlan action_plan;
  //************************************************************************
     private String name;
     private String acronym;
@@ -72,8 +72,8 @@ public class Meeting {
      *
      * @return
      */
-    public ActionPlan getPlan() {
-        return plan;
+    public ActionPlan getActionPlan() {
+        return action_plan;
     }
 
     /**
@@ -136,8 +136,8 @@ public class Meeting {
      *
      * @param plan
      */
-    public void setPlan(ActionPlan plan) {
-        this.plan = plan;
+    public void setActionPlan(ActionPlan action_plan) {
+        this.action_plan = action_plan;
     }
 
     /**

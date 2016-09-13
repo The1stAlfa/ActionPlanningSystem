@@ -92,7 +92,11 @@ public class Facility {
         this.city = city;
     }
     
-    public Meeting searchMeeting(String meeting){
+    public Meeting searchMeeting(String name){
+        for(Meeting meeting:meetings){
+            if(meeting.getName().equalsIgnoreCase(name))
+                return meeting;
+        }
         return null;
     }
 }

@@ -134,7 +134,7 @@ public class Terminal{
     
     public DefaultTableModel getTableContent(ActionItemFilter filter, String meeting) throws Exception{
         String id, responsible, date, status, duration;
-        //ActionPlan plan = getActionPlan(meeting);
+        ActionPlan plan = APSys.org.getFacility("01").searchMeeting(meeting).getActionPlan();
         ArrayList<Action> list = new ArrayList();
         DefaultTableModel dm = new DefaultTableModel(null, new String [] {
                 "id","Action Detail", "Owner", "Comments", 
@@ -145,7 +145,7 @@ public class Terminal{
         if(filter.equals(ActionItemFilter.ALL)){
             String query = "SELECT id,item_id,detail,comments,p_start_date,"
                     + "p_finish_date, r_finish_date,progress,status,"
-                    + "duration FROM planb.action;";
+                    + "duration FROM planb.action ;";
             planB_DB.connection();
             ResultSet rs = planB_DB.selectQuery(query);
             if(rs != null){
@@ -185,7 +185,7 @@ public class Terminal{
                     dm.addRow(row);
                     list.add(action);
                 }
-                //plan.setActionList(list);
+                plan.setActionList(list);
             }
             planB_DB.disconnection();
         }
@@ -292,7 +292,7 @@ public class Terminal{
                 meeting.setAcronym(rs.getString("acronym"));
                 meeting.setPurpose(rs.getString("purpose"));
                 meeting.setDateCreated(LocalDateTime.parse(rs.getString("date_created").substring(0,19),formatter));
-                meeting.setPlan(getActionPlan(Integer.parseInt(result[count].toString())));
+                meeting.setActionPlan(getActionPlan(Integer.parseInt(result[count].toString())));
                 list.add(meeting);   
                 count++;
             }
