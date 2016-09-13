@@ -24,9 +24,9 @@ public class ActionPlan {
     private LocalDateTime date_modified;
     private LocalDateTime current_date;
     private byte execution; // Action Plan porcentage of execution
-    private short last_action_number;
     private byte zeros;
-    
+    private byte initial_zeros = 4;
+            
     /**
      *
      */
@@ -78,10 +78,6 @@ public class ActionPlan {
     public byte getExecution() {
         return execution;
     }
-
-    public short getLastActionNumber() {
-        return last_action_number;
-    }
     
     public byte getZeros() {
         return zeros;
@@ -119,12 +115,18 @@ public class ActionPlan {
         this.execution = execution;
     }    
 
-    public void setLastActionNumber(short number) {
-        this.last_action_number = number;
-    }
-    
     public void setZeros(byte zeros) {
         this.zeros = zeros;
+    }
+    
+    public void setZeros(int number){
+        String n = String.valueOf(number); 
+        if(number == initial_zeros)
+            this.zeros = (byte)(initial_zeros+(byte)1);
+        else if(number > initial_zeros)
+            this.zeros = (byte)(n.length()+1);
+        else
+            this.zeros = (byte)(initial_zeros - (byte)n.length());
     }
     
     public Action searchAction(String key){
@@ -137,7 +139,6 @@ public class ActionPlan {
     
     public boolean insertAction(Action action){
         action_list.add(action);
-        last_action_number += (short) 1;
         return true;
     }
     

@@ -15,7 +15,7 @@ public class Collaborator {
     //************************************************************************
     private String acronym_name; // This variable is exposed in the Action Plan
     private String charge;       // where the collaborator belongs.
-    private short employee_id;
+    private int employee_id;
     private String firstName;
     private String middlename;
     private String lastName;
@@ -54,7 +54,7 @@ public class Collaborator {
         return charge;
     }
 
-    public short getEmployeeId() {
+    public int getEmployeeId() {
         return employee_id;
     }
     
@@ -80,13 +80,18 @@ public class Collaborator {
         for(String name:names)
             acronym_name = acronym_name+name.substring(0,1).toUpperCase();
     }
+    
+    public void setAcronymName(String acronym){
+        this.acronym_name = acronym;
+    }
 
     public void setCharge(String charge) {
         this.charge = charge;
     }
 
-    public void setEmployeeId(short employee_id) {
+    public void setEmployeeId(int employee_id) {
         this.employee_id = employee_id;
+
     }
     
     public void setFirstName(String firstName) {

@@ -293,7 +293,7 @@ public class LoginForm extends JFrame {
     private void loginButtonActionPerformed() throws NoSuchAlgorithmException, SQLException, IOException, FontFormatException, Exception{
         if(!(usernameTextField.getText().isEmpty())){
             if(!(String.valueOf(passwordField.getPassword()).isEmpty())){
-                if(APSys.getTerminal().login(usernameTextField.getText(), String.valueOf(passwordField.getPassword())))
+                if(APSys.getTerminal().login(usernameTextField.getText(), String.valueOf(passwordField.getPassword()))){
                     this.dispose();
                     APSys.initSystem();
                 }
@@ -304,6 +304,7 @@ public class LoginForm extends JFrame {
                     //goOnLabel.setVisible(false);
                     JOptionPane.showMessageDialog(null,"Username or Password Incorrect.","Error",JOptionPane.ERROR_MESSAGE);
                 }
+            }
         }
         else{
             if((String.valueOf(passwordField.getPassword()).isEmpty()))

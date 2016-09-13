@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class User {
     private String username = null;
     private String password = null;
-    private Short employeeId;
+    private int employeeId;
     private Role role;
     private String email;
     private ArrayList<String> access_list;
@@ -51,7 +51,7 @@ public class User {
         return this.email;
     }
     
-    public Short getEmployeeId(){
+    public int getEmployeeId(){
         return this.employeeId;
     }
     
@@ -75,7 +75,7 @@ public class User {
         this.email = email;
     }
     
-    public void setEmployeeId(Short id){
-        this.employeeId = id;
+    public void setEmployeeId(int id){
+        this.employeeId = id;   
     }
 }

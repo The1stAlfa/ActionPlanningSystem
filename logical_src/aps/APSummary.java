@@ -13,88 +13,88 @@ import java.time.LocalDateTime;
  */
 public class APSummary {
     private LocalDateTime date_modified;
-    private int ta_CANCELLED;
-    private int ta;  // Total of Actions
-    private int ta_C_AFTERAPP;  // Completed after as per plan
-    private int ta_C_APP;  // Completed app = As Per Plan
-    private int ta_IN_PROGRESS;
-    private int ta_NEAR_DUE_DATE;
-    private int ta_OVERDUE;
+    private int actions_cancelled;
+    private int actions;  // Total of Actions
+    private int actions_completed_after_app;  // Completed after as per plan
+    private int actions_completed_app;  // Completed app = As Per Plan
+    private int actions_in_progress;
+    private int actions_near_to_due_day;
+    private int actions_overdue;
     
     /**
      *
      */
     public APSummary(){
-        ta = 0;
-        ta_C_APP = 0;
-        ta_C_AFTERAPP = 0;
-        ta_OVERDUE = 0;
-        ta_NEAR_DUE_DATE = 0;
-        ta_IN_PROGRESS = 0;
-        ta_CANCELLED = 0;
+        actions = 0;
+        actions_completed_after_app = 0;
+        actions_completed_app = 0;
+        actions_in_progress= 0;
+        actions_near_to_due_day = 0;
+        actions_overdue = 0;
+        actions_cancelled = 0;
     }
 
     public LocalDateTime getDateModified() {
         return date_modified;
     }
 
-    public int getTaCANCELLED() {
-        return ta_CANCELLED;
+    public int getActionsCancelled() {
+        return actions_cancelled;
     }
 
-    public int getTa() {
-        return ta;
+    public int getActions() {
+        return actions;
     }
 
-    public int getTa_C_AFTERAPP() {
-        return ta_C_AFTERAPP;
+    public int getActionsCompletedAfterApp() {
+        return actions_completed_after_app;
     }
 
-    public int getTa_C_APP() {
-        return ta_C_APP;
+    public int getActionsCompletedApp() {
+        return actions_completed_app;
     }
 
-    public int getTa_IN_PROGRESS() {
-        return ta_IN_PROGRESS;
+    public int getActionsInProgress() {
+        return actions_in_progress;
     }
 
-    public int getTa_NEAR_DUE_DATE() {
-        return ta_NEAR_DUE_DATE;
+    public int getActionsNearDueDate() {
+        return actions_near_to_due_day;
     }
 
-    public int getTa_OVERDUE() {
-        return ta_OVERDUE;
+    public int getActionsOverdue() {
+        return actions_overdue;
     }
-
+    
     public void setDate_modified(LocalDateTime date_modified) {
         this.date_modified = date_modified;
     }
 
-    public void setTa_CANCELLED(int ta_CANCELLED) {
-        this.ta_CANCELLED = ta_CANCELLED;
+    public void setActionsCancelled(int actions_cancelled) {
+        this.actions_cancelled = actions_cancelled;
     }
 
-    public void setTa(int ta) {
-        this.ta = ta;
+    public void setActions(int actions) {
+        this.actions = actions;
     }
 
-    public void setTa_C_AFTERAPP(int ta_C_AFTERAPP) {
-        this.ta_C_AFTERAPP = ta_C_AFTERAPP;
+    public void setActionsCompletedAfterApp(int actions_completed_after_app) {
+        this.actions_completed_after_app = actions_completed_after_app;
     }
 
-    public void setTa_C_APP(int ta_C_APP) {
-        this.ta_C_APP = ta_C_APP;
+    public void setActionsCompletedApp(int actions_completed_app) {
+        this.actions_completed_app = actions_completed_app;
     }
 
-    public void setTa_IN_PROGRESS(int ta_IN_PROGRESS) {
-        this.ta_IN_PROGRESS = ta_IN_PROGRESS;
+    public void setActionsInProgress(int actions_in_progress) {
+        this.actions_in_progress = actions_in_progress;
     }
 
-    public void setTa_NEAR_DUE_DATE(int ta_NEAR_DUE_DATE) {
-        this.ta_NEAR_DUE_DATE = ta_NEAR_DUE_DATE;
+    public void setActionsNearToDueDay(int actions_near_to_due_day) {
+        this.actions_near_to_due_day = actions_near_to_due_day;
     }
 
-    public void setTa_OVERDUE(int ta_OVERDUE) {
-        this.ta_OVERDUE = ta_OVERDUE;
-    }    
+    public void setActionsOverdue(int actions_overdue) {
+        this.actions_overdue = actions_overdue;
+    }
 }
