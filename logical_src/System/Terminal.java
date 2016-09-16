@@ -132,12 +132,16 @@ public class Terminal{
         return false;
     }
     
-    public DefaultTableModel getTableContent(ActionItemFilter filter, String meeting) throws Exception{
+    public Object[] getTableContent(ActionItemFilter filter, String meeting) throws Exception{
         String id, responsible, date, status, duration;
-        ActionPlan plan = APSys.org.getFacility("01").searchMeeting(meeting).getActionPlan();
+        ActionPlan plan;
+        if(APSys.org.getFacility("01").searchMeeting(meeting) != null)
+            plan = APSys.org.getFacility("01").searchMeeting(meeting).getActionPlan();
+        else
+            plan = new ActionPlan();
         ArrayList<Action> list = new ArrayList();
         DefaultTableModel dm = new DefaultTableModel(null, new String [] {
-                "id","Action Detail", "Owner", "Comments", 
+                "id","Action Detail", "Responsible", "Comments", 
                 "Planned Start Date", "Planned Finish Date", "Real Finish Date",
                 "Progress", "Status", "Duration" 
             });
@@ -145,7 +149,9 @@ public class Terminal{
         if(filter.equals(ActionItemFilter.ALL)){
             String query = "SELECT id,item_id,detail,comments,p_start_date,"
                     + "p_finish_date, r_finish_date,progress,status,"
-                    + "duration FROM planb.action ;";
+                    + "timestampdiff(day,p_start_date,p_finish_date) AS duration "
+                    + "FROM planb.action INNER JOIN planb.actionplan_action ON "
+                    + "id=action_id and actionplan_id="+plan.getId()+";";
             planB_DB.connection();
             ResultSet rs = planB_DB.selectQuery(query);
             if(rs != null){
@@ -189,7 +195,7 @@ public class Terminal{
             }
             planB_DB.disconnection();
         }
-        return dm;
+        return new Object[]{plan,dm};
     }
     
     public String getOwnerAcronym(String actionID) throws Exception{
@@ -319,22 +325,22 @@ public class Terminal{
             query = "SELECT date_modified, actions, actions_cancelled,"
                 + "actions_completed_after_app,actions_completed_app,"
                 + "actions_in_progress,actions_near_to_due_day,actions_overdue "
-                + "FROM planb.apsumary INNER JOIN planb.actionplan_apsumary ON "
-                + "id=apsumary_id and actionplan_id="+action_plan.getId()+";";
+                + "FROM planb.apsummary INNER JOIN planb.actionplan_apsummary ON "
+                + "id=apsummary_id and actionplan_id="+action_plan.getId()+";";
             rs = planB_DB.selectQuery(query);
             if(rs != null){
                 rs.next();
-                APSummary apsumary = new APSummary();
-                apsumary.setDate_modified(LocalDateTime.parse(rs.getString("date_modified").substring(0,19), formatter));
-                apsumary.setActions(rs.getInt("actions"));
-                apsumary.setActionsCompletedAfterApp(rs.getInt("actions_completed_after_app"));
-                apsumary.setActionsCompletedApp(rs.getInt("actions_completed_app"));
-                apsumary.setActionsInProgress(rs.getInt("actions_in_progress"));
-                apsumary.setActionsNearToDueDay(rs.getInt("actions_near_to_due_day"));
-                apsumary.setActionsCancelled(rs.getInt("actions_cancelled"));
-                apsumary.setActionsOverdue(rs.getInt("actions_overdue"));
+                APSummary apsummary = new APSummary();
+                apsummary.setDate_modified(LocalDateTime.parse(rs.getString("date_modified").substring(0,19), formatter));
+                apsummary.setActions(rs.getInt("actions"));
+                apsummary.setActionsCompletedAfterApp(rs.getInt("actions_completed_after_app"));
+                apsummary.setActionsCompletedApp(rs.getInt("actions_completed_app"));
+                apsummary.setActionsInProgress(rs.getInt("actions_in_progress"));
+                apsummary.setActionsNearToDueDay(rs.getInt("actions_near_to_due_day"));
+                apsummary.setActionsCancelled(rs.getInt("actions_cancelled"));
+                apsummary.setActionsOverdue(rs.getInt("actions_overdue"));
                 action_plan.setZeros(rs.getInt("actions"));
-                action_plan.setSummary(apsumary);
+                action_plan.setSummary(apsummary);
                 query = "SELECT employee_id, firstname, middlename, lastname, "
                         + "acronym_name, charge FROM planb.collaborator INNER JOIN"
                         + " planb.collaborator_actionplan ON "

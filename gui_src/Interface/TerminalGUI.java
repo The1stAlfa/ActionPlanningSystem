@@ -7,7 +7,9 @@
 package Interface;
 
 import System.APSys;
+import aps.APSummary;
 import aps.ActionItemFilter;
+import aps.ActionPlan;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -49,6 +51,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * @palette
@@ -90,6 +93,11 @@ public class TerminalGUI extends JFrame{
     public JLabel hallLabel, movieLabel, aboutLabel, settingsLabel, userLabel;
     private JLabel initImageLabel;
     private String resource, meetingName;
+    JLabel apLabel, owLabel, parLabel, meetLabel, actLabel, compLabel, 
+                compAppLabel, overAppLabel, actContentLabel, owContentLabel,
+                compContentLabel, compAppContentLabel, overAppContentLabel, 
+                performanceLabel, exeLabel, performanceContentLabel, 
+                exeContentLabel;
     private boolean menuFlag = false, resizeFlag = false;
 
        
@@ -417,11 +425,6 @@ public class TerminalGUI extends JFrame{
     }
     
     private void createActionPlanPanel() throws Exception{
-        JLabel apLabel, owLabel, parLabel, meetLabel, actLabel, compLabel, 
-                compAppLabel, overAppLabel, actContentLabel, owContentLabel,
-                compContentLabel, compAppContentLabel, overAppContentLabel, 
-                performanceLabel, exeLabel, performanceContentLabel, 
-                exeContentLabel;
         GridBagConstraints gbc = new GridBagConstraints();
         JComboBox meetComboBox = new JComboBox();
         JTable jTable1 = new JTable();
@@ -507,14 +510,22 @@ public class TerminalGUI extends JFrame{
         meetComboBox.setMaximumSize(new Dimension(150, 24));
         meetComboBox.setPreferredSize(new Dimension(150, 24));
         meetComboBox.setSelectedIndex(-1);
-        meetComboBox.addItemListener(new ItemListener(){
-            public void itemStateChanged(ItemEvent event){
-                meetingSelected(event);
-                try {
-                    jTable1.setModel(APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName));
-                } catch (Exception ex) {
-                    Logger.getLogger(TerminalGUI.class.getName()).log(Level.SEVERE, null, ex);
+        meetComboBox.addItemListener((ItemEvent event) -> {
+            meetingSelected(event);
+            try {
+                ActionPlan plan = (ActionPlan)APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[0];
+                jTable1.setModel((TableModel) APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[1]);
+                if(plan != null){
+                    APSummary summary = plan.getSummary();
+                    owContentLabel.setText(plan.getOwner().getFirstName()+" "+plan.getOwner().getLastName());
+                    actContentLabel.setText(String.valueOf(summary.getActions()));
+                    compContentLabel.setText(String.valueOf(summary.getActionsCompletedApp()+summary.getActionsCompletedAfterApp()));
+                    compAppContentLabel.setText(String.valueOf(summary.getActionsCompletedApp()));
+                    overAppContentLabel.setText(String.valueOf(summary.getActionsOverdue()));
+                    
                 }
+            } catch (Exception ex) {
+                Logger.getLogger(TerminalGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         gbc = new GridBagConstraints();
@@ -581,7 +592,7 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 2, 2, 2);
         pane.add(overAppLabel, gbc);
 
-        actContentLabel = new JLabel("100");
+        actContentLabel = new JLabel();
         actContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
         actContentLabel.setPreferredSize(new Dimension(40, 16));
         gbc = new GridBagConstraints();
@@ -590,7 +601,7 @@ public class TerminalGUI extends JFrame{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         pane.add(actContentLabel, gbc);
 
-        owContentLabel = new JLabel("Sergio Orjuela");
+        owContentLabel = new JLabel();
         owContentLabel.setHorizontalAlignment(SwingConstants.LEFT);
         owContentLabel.setLabelFor(owLabel);
         owContentLabel.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -606,7 +617,7 @@ public class TerminalGUI extends JFrame{
         pane.add(owContentLabel, gbc);
         
         jTable1.setModel(new DefaultTableModel(null, new String [] {
-                "id","Action Detail", "Owner", "Comments", 
+                "id","Action Detail", "Responsible", "Comments", 
                 "Planned Start Date", "Planned Finish Date", "Real Finish Date",
                 "Progress", "Status", "Duration" 
             }));
@@ -617,7 +628,7 @@ public class TerminalGUI extends JFrame{
         jScrollPane2.setBackground(Color.decode("#FCFEFC"));
         pane2.add(jScrollPane2, BorderLayout.CENTER);
         
-        compContentLabel = new JLabel("56");
+        compContentLabel = new JLabel();
         compContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
         compContentLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         gbc = new GridBagConstraints();
@@ -627,7 +638,7 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new java.awt.Insets(0, 2, 2, 2);
         pane.add(compContentLabel, gbc);
 
-        compAppContentLabel = new JLabel("28");
+        compAppContentLabel = new JLabel();
         compAppContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
         compAppContentLabel.setVerticalAlignment(SwingConstants.TOP);
         compAppContentLabel.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -639,7 +650,7 @@ public class TerminalGUI extends JFrame{
         gbc.anchor = GridBagConstraints.NORTHEAST;
         pane.add(compAppContentLabel, gbc);
 
-        overAppContentLabel = new JLabel("16");
+        overAppContentLabel = new JLabel();
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
         gbc.gridy = 4;
@@ -795,6 +806,10 @@ public class TerminalGUI extends JFrame{
     }
     
     private void meetingSelected(ItemEvent event){
-        event.getItem().toString();
+        meetingName = event.getItem().toString();
+    }
+    
+    private void setAPSumary(ActionPlan plan){
+        
     }
 }
