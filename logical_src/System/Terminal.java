@@ -141,10 +141,16 @@ public class Terminal{
             plan = new ActionPlan();
         ArrayList<Action> list = new ArrayList();
         DefaultTableModel dm = new DefaultTableModel(null, new String [] {
-                "id","Action Detail", "Responsible", "Comments", 
-                "Planned Start Date", "Planned Finish Date", "Real Finish Date",
-                "Progress", "Status", "Duration" 
-            });
+                "Id","Responsible", "Detail", "Comments", 
+                "P.Start Date", "P.Finish Date", "R.Finish Date",
+                "Progress", "Status", "Duration", ""
+            }){
+                public boolean isCellEditable(int row, int column){
+                    if(column == 10)
+                        return true;
+                    return false;
+                }
+            };
         
         if(filter.equals(ActionItemFilter.ALL)){
             String query = "SELECT id,item_id,detail,comments,p_start_date,"
@@ -161,11 +167,11 @@ public class Terminal{
                     id = rs.getString("id");
                     row.add(rs.getString("item_id"));
                     action.setID(rs.getString("item_id"));
-                    row.add(rs.getString("detail"));
-                    action.setDetail(rs.getString("detail"));
                     responsible = getOwnerAcronym(id);
                     row.add(responsible);
                     action.setResponsible(getCollaborator(responsible));
+                    row.add(rs.getString("detail"));
+                    action.setDetail(rs.getString("detail"));
                     row.add(rs.getString("comments"));
                     action.setComments(rs.getString("comments"));
                     date = rs.getString("p_start_date");
@@ -188,6 +194,7 @@ public class Terminal{
                         action.setDuration((byte)0);
                     else
                         action.setDuration((byte) Integer.parseInt(duration));
+                    row.add(null);
                     dm.addRow(row);
                     list.add(action);
                 }

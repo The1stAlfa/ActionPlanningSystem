@@ -12,6 +12,7 @@ import aps.ActionItemFilter;
 import aps.ActionPlan;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -29,6 +30,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -36,6 +38,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -50,7 +53,9 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 /**
@@ -430,8 +435,8 @@ public class TerminalGUI extends JFrame{
         JTable jTable1 = new JTable();
         JScrollPane jScrollPane1, jScrollPane2;
         JTextPane jTextPane1 = new JTextPane();
-        JPanel modifyPanel = new JPanel();
-        JLabel addAction, editAction;
+        JPanel filterPanel = new JPanel();
+
         
         actionPlanPanel = new JPanel();
         actionPlanPanel.setLayout(new BorderLayout());
@@ -515,6 +520,43 @@ public class TerminalGUI extends JFrame{
             try {
                 ActionPlan plan = (ActionPlan)APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[0];
                 jTable1.setModel((TableModel) APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[1]);
+                jTable1.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer(){
+                    JPanel modifyPanel = new JPanel();
+                    JLabel delete = new JLabel();
+                    JLabel edit = new JLabel();
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                        boolean hasFocus, int row, int column){
+                        edit.setIcon(new ImageIcon(resource+"edit-16.png"));
+                        delete.setIcon(new ImageIcon(resource+"delete-16.png"));
+                        modifyPanel.setLayout(new FlowLayout());
+                        modifyPanel.setBackground(Color.decode("#FCFEFC"));
+                        modifyPanel.add(edit);
+                        modifyPanel.add(delete);
+                        return modifyPanel;
+                    }
+                });
+                jTable1.getColumnModel().getColumn(10).setPreferredWidth(50);
+                jTable1.addMouseListener(new MouseListener(){
+                    public void mouseClicked(MouseEvent e){
+                        
+                        AddActionForm add_action = new AddActionForm();
+                        add_action.setVisible(true);
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e){}
+
+                    @Override
+                    public void mouseReleased(MouseEvent e){}
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+                });
                 if(plan != null){
                     APSummary summary = plan.getSummary();
                     owContentLabel.setText(plan.getOwner().getFirstName()+" "+plan.getOwner().getLastName());
@@ -616,16 +658,43 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 4, 3, 2);
         pane.add(owContentLabel, gbc);
         
-        jTable1.setModel(new DefaultTableModel(null, new String [] {
-                "id","Action Detail", "Responsible", "Comments", 
-                "Planned Start Date", "Planned Finish Date", "Real Finish Date",
-                "Progress", "Status", "Duration" 
-            }));
+        jTable1.setModel(new DefaultTableModel(new Object[][]{
+            {"","","","","","","","","","",""}
+        }, new String [] {
+                "Id", "Responsible", "Detail", "Comments", 
+                "P.Start Date", "P.Finish Date", "R.Finish Date",
+                "Progress", "Status", "Duration", ""
+        }));
         jTable1.setMinimumSize(new Dimension(300, 200));
         jTable1.setBackground(Color.decode("#FCFEFC"));
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setRowHeight(50);
+        jTable1.setGridColor(Color.decode("#FCFEFC"));
+        jTable1.setFillsViewportHeight(true);
+        jTable1.setFocusable(true);
+        jTable1.setSelectionBackground(Color.decode("#303132"));
+        jTable1.setSelectionForeground(Color.decode("#C9CDD1"));
+        jTable1.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer(){
+                    JPanel modifyPanel = new JPanel();
+                    JLabel delete = new JLabel();
+                    JLabel edit = new JLabel();
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                        boolean hasFocus, int row, int column){
+                        edit.setIcon(new ImageIcon(resource+"edit-16.png"));
+                        delete.setIcon(new ImageIcon(resource+"delete-16.png"));
+                        modifyPanel.setLayout(new FlowLayout());
+                        modifyPanel.setBackground(Color.decode("#FCFEFC"));
+                        modifyPanel.add(edit);
+                        modifyPanel.add(delete);
+                        return modifyPanel;
+                    }
+                });
+        jTable1.getColumnModel().getColumn(10).setPreferredWidth(50);                
+
         jScrollPane2 = new JScrollPane();
         jScrollPane2.setViewportView(jTable1);
-        jScrollPane2.setBackground(Color.decode("#FCFEFC"));
+        jScrollPane2.getViewport().setBackground(Color.decode("#FCFEFC"));
+        jScrollPane2.setBorder(BorderFactory.createEmptyBorder());
         pane2.add(jScrollPane2, BorderLayout.CENTER);
         
         compContentLabel = new JLabel();
@@ -735,14 +804,6 @@ public class TerminalGUI extends JFrame{
         p.setPreferredSize(new Dimension(500,328));
         p.setBackground(Color.decode("#FCFEFC"));
         */
-        addAction = new JLabel();
-        editAction = new JLabel();
-        editAction.setIcon(new ImageIcon(resource+"delete-16.png"));
-        modifyPanel.setLayout(new FlowLayout());
-        modifyPanel.add(addAction);
-        modifyPanel.add(editAction);
-        modifyPanel.setBackground(Color.decode("#FCFEFC"));
-        pane2.add(modifyPanel, BorderLayout.EAST);
         actionPlanPanel.add(pane, BorderLayout.NORTH);
         actionPlanPanel.add(pane2, BorderLayout.CENTER);
         

@@ -61,6 +61,8 @@ public class Terminal extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         jPopupMenu1.setSize(250, 400);
         jPopupMenu1.setBackground(new java.awt.Color(28, 28, 28));
@@ -260,7 +262,6 @@ public class Terminal extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 3, 2);
         jPanel4.add(jLabel10, gridBagConstraints);
-        jLabel10.getAccessibleContext().setAccessibleName("Sergio Orjuela");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -279,7 +280,7 @@ public class Terminal extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 5;
@@ -392,6 +393,18 @@ public class Terminal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 2, 2);
         jPanel4.add(jLabel17, gridBagConstraints);
 
+        jLabel19.setText("FILTER");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        jPanel4.add(jLabel19, gridBagConstraints);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        jPanel4.add(jComboBox2, gridBagConstraints);
+
         jPanel2.add(jPanel4, java.awt.BorderLayout.CENTER);
         jPanel4.getAccessibleContext().setAccessibleName("optionsContentPanel");
         jPanel4.getAccessibleContext().setAccessibleDescription("");
@@ -440,6 +453,7 @@ public class Terminal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -449,6 +463,7 @@ public class Terminal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
