@@ -436,7 +436,6 @@ public class TerminalGUI extends JFrame{
         JScrollPane jScrollPane1, jScrollPane2;
         JTextPane jTextPane1 = new JTextPane();
         JPanel filterPanel = new JPanel();
-
         
         actionPlanPanel = new JPanel();
         actionPlanPanel.setLayout(new BorderLayout());
@@ -521,42 +520,39 @@ public class TerminalGUI extends JFrame{
                 ActionPlan plan = (ActionPlan)APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[0];
                 jTable1.setModel((TableModel) APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[1]);
                 jTable1.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer(){
-                    JPanel modifyPanel = new JPanel();
-                    JLabel delete = new JLabel();
                     JLabel edit = new JLabel();
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                         boolean hasFocus, int row, int column){
                         edit.setIcon(new ImageIcon(resource+"edit-16.png"));
-                        delete.setIcon(new ImageIcon(resource+"delete-16.png"));
-                        modifyPanel.setLayout(new FlowLayout());
-                        modifyPanel.setBackground(Color.decode("#FCFEFC"));
-                        modifyPanel.add(edit);
-                        modifyPanel.add(delete);
-                        return modifyPanel;
+                        return edit;
                     }
                 });
-                jTable1.getColumnModel().getColumn(10).setPreferredWidth(50);
-                jTable1.addMouseListener(new MouseListener(){
-                    public void mouseClicked(MouseEvent e){
-                        
-                        AddActionForm add_action = new AddActionForm();
-                        add_action.setVisible(true);
+                jTable1.getColumnModel().getColumn(10).setPreferredWidth(20);
+                jTable1.getColumnModel().getColumn(11).setCellRenderer(new DefaultTableCellRenderer(){
+                    JLabel delete = new JLabel();
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                        boolean hasFocus, int row, int column){
+                        delete.setIcon(new ImageIcon(resource+"delete-16.png"));
+                        return delete;
                     }
-
+                });
+                jTable1.addMouseListener(new MouseListener(){
+                    AddActionForm add_action;
+                    public void mouseClicked(MouseEvent e){
+                        if(jTable1.getSelectedColumn() == 10)
+                             add_action = new AddActionForm();
+                        //add_action.setVisible(true);
+                    }
                     @Override
                     public void mousePressed(MouseEvent e){}
-
                     @Override
                     public void mouseReleased(MouseEvent e){}
                     @Override
-                    public void mouseEntered(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
+                    public void mouseEntered(MouseEvent e){}
+                    
+                    public void mouseExited(MouseEvent e){}
                 });
+                jTable1.getColumnModel().getColumn(11).setPreferredWidth(20);
                 if(plan != null){
                     APSummary summary = plan.getSummary();
                     owContentLabel.setText(plan.getOwner().getFirstName()+" "+plan.getOwner().getLastName());
@@ -658,12 +654,10 @@ public class TerminalGUI extends JFrame{
         gbc.insets = new Insets(0, 4, 3, 2);
         pane.add(owContentLabel, gbc);
         
-        jTable1.setModel(new DefaultTableModel(new Object[][]{
-            {"","","","","","","","","","",""}
-        }, new String [] {
+        jTable1.setModel(new DefaultTableModel(null, new String [] {
                 "Id", "Responsible", "Detail", "Comments", 
                 "P.Start Date", "P.Finish Date", "R.Finish Date",
-                "Progress", "Status", "Duration", ""
+                "Progress", "Status", "Duration", "", ""
         }));
         jTable1.setMinimumSize(new Dimension(300, 200));
         jTable1.setBackground(Color.decode("#FCFEFC"));
@@ -674,23 +668,9 @@ public class TerminalGUI extends JFrame{
         jTable1.setFocusable(true);
         jTable1.setSelectionBackground(Color.decode("#303132"));
         jTable1.setSelectionForeground(Color.decode("#C9CDD1"));
-        jTable1.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer(){
-                    JPanel modifyPanel = new JPanel();
-                    JLabel delete = new JLabel();
-                    JLabel edit = new JLabel();
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                        boolean hasFocus, int row, int column){
-                        edit.setIcon(new ImageIcon(resource+"edit-16.png"));
-                        delete.setIcon(new ImageIcon(resource+"delete-16.png"));
-                        modifyPanel.setLayout(new FlowLayout());
-                        modifyPanel.setBackground(Color.decode("#FCFEFC"));
-                        modifyPanel.add(edit);
-                        modifyPanel.add(delete);
-                        return modifyPanel;
-                    }
-                });
-        jTable1.getColumnModel().getColumn(10).setPreferredWidth(50);                
-
+        jTable1.getColumnModel().getColumn(10).setPreferredWidth(20);                
+        jTable1.getColumnModel().getColumn(11).setPreferredWidth(20);
+        
         jScrollPane2 = new JScrollPane();
         jScrollPane2.setViewportView(jTable1);
         jScrollPane2.getViewport().setBackground(Color.decode("#FCFEFC"));
