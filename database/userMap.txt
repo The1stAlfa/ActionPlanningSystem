@@ -1,3 +1,0 @@
-admin;23
-mngrusr;1
-commusr;2

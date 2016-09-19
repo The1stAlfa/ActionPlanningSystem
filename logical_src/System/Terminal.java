@@ -143,11 +143,9 @@ public class Terminal{
         DefaultTableModel dm = new DefaultTableModel(null, new String [] {
                 "Id","Responsible", "Detail", "Comments", 
                 "P.Start Date", "P.Finish Date", "R.Finish Date",
-                "Progress", "Status", "Duration", "", ""
+                "Progress", "Status", "Duration"
             }){
                 public boolean isCellEditable(int row, int column){
-                    if(column == 10)
-                        return true;
                     return false;
                 }
             };

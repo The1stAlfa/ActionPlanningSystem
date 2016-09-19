@@ -49,14 +49,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.ListSelectionModel;
 
 /**
  * @palette
@@ -87,7 +91,7 @@ import javax.swing.table.TableModel;
 
 public class TerminalGUI extends JFrame{
     private Dimension nativeScreenSize;
-    private int xPosition=0, yPosition=0;
+    private int value_at_changed, xPosition=0, yPosition=0, selected_row=-1;
     private JMenuBar mainMenu;
     private JMenuItem dashboardMenu, meetingMenu, actionPlanMenu, teamMenu,
             profileMenu,settingMenu,menuItem;
@@ -103,6 +107,9 @@ public class TerminalGUI extends JFrame{
                 compContentLabel, compAppContentLabel, overAppContentLabel, 
                 performanceLabel, exeLabel, performanceContentLabel, 
                 exeContentLabel;
+    private JPanel filter_panel, ap_information_panel, a_list_panel;
+    private JLabel add_action_label, modify_action_label, delete_action_label;
+    private JComboBox filter_content_comboBox,filterCombobox;
     private boolean menuFlag = false, resizeFlag = false;
 
        
@@ -435,21 +442,23 @@ public class TerminalGUI extends JFrame{
         JTable jTable1 = new JTable();
         JScrollPane jScrollPane1, jScrollPane2;
         JTextPane jTextPane1 = new JTextPane();
-        JPanel filterPanel = new JPanel();
+        
         
         actionPlanPanel = new JPanel();
         actionPlanPanel.setLayout(new BorderLayout());
         actionPlanPanel.setMaximumSize(new Dimension(Short.MAX_VALUE,Short.MAX_VALUE));
         actionPlanPanel.setBackground(Color.decode("#FCFEFC"));
         
-        JPanel pane = new JPanel();
-        pane.setLayout(new GridBagLayout());
-        pane.setBackground(Color.decode("#FCFEFC"));
-        JPanel pane2 = new JPanel();
-        pane2.setLayout(new BorderLayout());
-        pane2.setPreferredSize(new Dimension(300,300));
-        pane2.setBackground(Color.decode("#FCFEFC"));
-        
+        ap_information_panel = new JPanel();
+        ap_information_panel.setLayout(new GridBagLayout());
+        ap_information_panel.setBackground(Color.decode("#FCFEFC"));
+        a_list_panel = new JPanel();
+        a_list_panel.setLayout(new BorderLayout());
+        a_list_panel.setPreferredSize(new Dimension(300,300));
+        a_list_panel.setBackground(Color.decode("#FCFEFC"));
+        //**********************************************************************
+        //  ActionPlan Information Panel Components
+        //**********************************************************************
         apLabel = new JLabel("Action Plan");
         apLabel.setFont(new Font("Dialog", 1, 24)); // NOI18N
         apLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -461,7 +470,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipadx = 2;
         gbc.anchor = GridBagConstraints.FIRST_LINE_END;
         gbc.insets = new Insets(0, 5, 0, 5);
-        pane.add(apLabel, gbc);
+        ap_information_panel.add(apLabel, gbc);
         
         owLabel = new JLabel("Owner");
         owLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -478,7 +487,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 2, 3);
-        pane.add(owLabel, gbc);
+        ap_information_panel.add(owLabel, gbc);
 
         parLabel = new JLabel("Participants");
         parLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -493,7 +502,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 4, 2, 3);
-        pane.add(parLabel, gbc);
+        ap_information_panel.add(parLabel, gbc);
         
         meetLabel = new JLabel("Meeting");
         meetLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -507,7 +516,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 2, 3);
-        pane.add(meetLabel, gbc);
+        ap_information_panel.add(meetLabel, gbc);
         
         meetComboBox.setModel(new DefaultComboBoxModel<>(APSys.getTerminal().getMeetingsNames()));
         meetComboBox.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(204, 204, 204), null, null));
@@ -519,6 +528,13 @@ public class TerminalGUI extends JFrame{
             try {
                 ActionPlan plan = (ActionPlan)APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[0];
                 jTable1.setModel((TableModel) APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[1]);
+                jTable1.getColumnModel().getColumn(0).setMaxWidth(75);
+                jTable1.getColumnModel().getColumn(1).setMaxWidth(80);
+                jTable1.getColumnModel().getColumn(4).setMaxWidth(75);
+                jTable1.getColumnModel().getColumn(5).setMaxWidth(75);
+                jTable1.getColumnModel().getColumn(6).setMaxWidth(75);
+
+                /*
                 jTable1.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer(){
                     JLabel edit = new JLabel();
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -527,6 +543,7 @@ public class TerminalGUI extends JFrame{
                         return edit;
                     }
                 });
+                    jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 jTable1.getColumnModel().getColumn(10).setPreferredWidth(20);
                 jTable1.getColumnModel().getColumn(11).setCellRenderer(new DefaultTableCellRenderer(){
                     JLabel delete = new JLabel();
@@ -536,23 +553,7 @@ public class TerminalGUI extends JFrame{
                         return delete;
                     }
                 });
-                jTable1.addMouseListener(new MouseListener(){
-                    AddActionForm add_action;
-                    public void mouseClicked(MouseEvent e){
-                        if(jTable1.getSelectedColumn() == 10)
-                             add_action = new AddActionForm();
-                        //add_action.setVisible(true);
-                    }
-                    @Override
-                    public void mousePressed(MouseEvent e){}
-                    @Override
-                    public void mouseReleased(MouseEvent e){}
-                    @Override
-                    public void mouseEntered(MouseEvent e){}
-                    
-                    public void mouseExited(MouseEvent e){}
-                });
-                jTable1.getColumnModel().getColumn(11).setPreferredWidth(20);
+                */
                 if(plan != null){
                     APSummary summary = plan.getSummary();
                     owContentLabel.setText(plan.getOwner().getFirstName()+" "+plan.getOwner().getLastName());
@@ -562,10 +563,12 @@ public class TerminalGUI extends JFrame{
                     overAppContentLabel.setText(String.valueOf(summary.getActionsOverdue()));
                     
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Logger.getLogger(TerminalGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -573,7 +576,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipadx = 2;
         gbc.ipady = 2;
         gbc.insets = new Insets(0, 2, 2, 2);
-        pane.add(meetComboBox, gbc);
+        ap_information_panel.add(meetComboBox, gbc);
 
         actLabel = new JLabel("Actions");
         actLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -586,7 +589,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 2, 2);
-        pane.add(actLabel, gbc);
+        ap_information_panel.add(actLabel, gbc);
 
         compLabel = new JLabel("Completed");
         compLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -599,7 +602,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 2, 2);
-        pane.add(compLabel, gbc);
+        ap_information_panel.add(compLabel, gbc);
 
         compAppLabel = new JLabel("Completed APP");
         compAppLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -615,7 +618,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 4, 2, 2);
-        pane.add(compAppLabel, gbc);
+        ap_information_panel.add(compAppLabel, gbc);
         
         overAppLabel = new JLabel("OverDue APP");
         overAppLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -628,7 +631,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 2, 2, 2);
-        pane.add(overAppLabel, gbc);
+        ap_information_panel.add(overAppLabel, gbc);
 
         actContentLabel = new JLabel();
         actContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -637,7 +640,7 @@ public class TerminalGUI extends JFrame{
         gbc.gridx = 3;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        pane.add(actContentLabel, gbc);
+        ap_information_panel.add(actContentLabel, gbc);
 
         owContentLabel = new JLabel();
         owContentLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -652,30 +655,7 @@ public class TerminalGUI extends JFrame{
         gbc.ipady = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 4, 3, 2);
-        pane.add(owContentLabel, gbc);
-        
-        jTable1.setModel(new DefaultTableModel(null, new String [] {
-                "Id", "Responsible", "Detail", "Comments", 
-                "P.Start Date", "P.Finish Date", "R.Finish Date",
-                "Progress", "Status", "Duration", "", ""
-        }));
-        jTable1.setMinimumSize(new Dimension(300, 200));
-        jTable1.setBackground(Color.decode("#FCFEFC"));
-        jTable1.setAutoCreateRowSorter(true);
-        jTable1.setRowHeight(50);
-        jTable1.setGridColor(Color.decode("#FCFEFC"));
-        jTable1.setFillsViewportHeight(true);
-        jTable1.setFocusable(true);
-        jTable1.setSelectionBackground(Color.decode("#303132"));
-        jTable1.setSelectionForeground(Color.decode("#C9CDD1"));
-        jTable1.getColumnModel().getColumn(10).setPreferredWidth(20);                
-        jTable1.getColumnModel().getColumn(11).setPreferredWidth(20);
-        
-        jScrollPane2 = new JScrollPane();
-        jScrollPane2.setViewportView(jTable1);
-        jScrollPane2.getViewport().setBackground(Color.decode("#FCFEFC"));
-        jScrollPane2.setBorder(BorderFactory.createEmptyBorder());
-        pane2.add(jScrollPane2, BorderLayout.CENTER);
+        ap_information_panel.add(owContentLabel, gbc);
         
         compContentLabel = new JLabel();
         compContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -685,7 +665,7 @@ public class TerminalGUI extends JFrame{
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new java.awt.Insets(0, 2, 2, 2);
-        pane.add(compContentLabel, gbc);
+        ap_information_panel.add(compContentLabel, gbc);
 
         compAppContentLabel = new JLabel();
         compAppContentLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -697,13 +677,13 @@ public class TerminalGUI extends JFrame{
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTHEAST;
-        pane.add(compAppContentLabel, gbc);
+        ap_information_panel.add(compAppContentLabel, gbc);
 
         overAppContentLabel = new JLabel();
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
         gbc.gridy = 4;
-        pane.add(overAppContentLabel, gbc);
+        ap_information_panel.add(overAppContentLabel, gbc);
 
         performanceLabel = new JLabel("Team Preformance APP");
         performanceLabel.setFont(new Font("Dialog", 1, 14)); // NOI18N
@@ -717,7 +697,7 @@ public class TerminalGUI extends JFrame{
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
         gbc.insets = new Insets(0, 12, 2, 2);
-        pane.add(performanceLabel, gbc);
+        ap_information_panel.add(performanceLabel, gbc);
         
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setPreferredSize(new Dimension(150, 25));
@@ -732,7 +712,7 @@ public class TerminalGUI extends JFrame{
         gbc.gridy = 3;
         gbc.gridheight = 2;
         gbc.fill = GridBagConstraints.BOTH;
-        pane.add(jScrollPane1, gbc);
+        ap_information_panel.add(jScrollPane1, gbc);
 
         exeLabel = new JLabel("Overall Execution");
         exeLabel.setFont(new Font("Dialog", 1, 14));
@@ -743,7 +723,7 @@ public class TerminalGUI extends JFrame{
         gbc.gridwidth = 3;
         gbc.gridheight = 2;
         gbc.fill = GridBagConstraints.BOTH;
-        pane.add(exeLabel, gbc);
+        ap_information_panel.add(exeLabel, gbc);
 
         performanceContentLabel = new JLabel("67%"); 
         performanceContentLabel.setBackground(new Color(55, 55, 55));
@@ -761,7 +741,7 @@ public class TerminalGUI extends JFrame{
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 12, 2, 2);
-        pane.add(performanceContentLabel, gbc);
+        ap_information_panel.add(performanceContentLabel, gbc);
 
         exeContentLabel = new JLabel("86%");
         exeContentLabel.setBackground(new Color(55, 55, 55));
@@ -777,15 +757,81 @@ public class TerminalGUI extends JFrame{
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 12, 2, 2);
-        pane.add(exeContentLabel, gbc);
+        ap_information_panel.add(exeContentLabel, gbc);
+        
+        //**********************************************************************
+        //  Action List Table Components
+        //**********************************************************************
+        //  Filter Panel
+        createFilterPanel();
+        //  Action List Table
+        jTable1.setModel(new DefaultTableModel(null, new String [] {
+                "Id", "Responsible", "Detail", "Comments", 
+                "P.Start Date", "P.Finish Date", "R.Finish Date",
+                "Progress", "Status", "Duration"
+            }));
+        jTable1.setMinimumSize(new Dimension(300, 200));
+        jTable1.setBackground(Color.decode("#FCFEFC"));
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setRowHeight(50);
+        jTable1.setGridColor(Color.decode("#FCFEFC"));
+        jTable1.setFillsViewportHeight(true);
+        //jTable1.setFocusable(true);
+        jTable1.setSelectionBackground(Color.decode("#303132"));
+        jTable1.setSelectionForeground(Color.decode("#C9CDD1"));
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(50);
+        /*
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+                    @Override
+                    public void valueChanged(ListSelectionEvent e) {
+                        //If the column is disabled, reselect previous column
+                        if (jTable1.getColumnModel().getSelectionModel().isSelectedIndex(10) ||
+                                jTable1.getColumnModel().getSelectionModel().isSelectedIndex(11)){
+                            jTable1.getSelectionModel().setSelectionInterval(0,selected_row);
+                        }
+                        //Set current selection
+                        //else cur_col = sel_mod1.getMaxSelectionIndex();
+                    }
+                });
+                //jTable1.setColumnSelectionAllowed(false);
+        jTable1.addMouseListener(new MouseListener(){
+            AddActionForm add_action;
+            public void mouseClicked(MouseEvent e){
+                if(jTable1.getSelectedColumn() == 10){
+                    if(jTable1.getSelectedRow() == value_at_changed)
+                        add_action = new AddActionForm();
+                        //jTable1.getColumnModel().getSelectionModel().setSelectionInterval(0, 0);
+                }
+                selected_row = jTable1.getSelectedRow();
+                //add_action.setVisible(true);
+            }
+            @Override
+            public void mousePressed(MouseEvent e){}
+            @Override
+            public void mouseReleased(MouseEvent e){}
+            @Override
+            public void mouseEntered(MouseEvent e){}
+
+            public void mouseExited(MouseEvent e){}
+        });
+        */
+        jScrollPane2 = new JScrollPane();
+        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.getViewport().setBackground(Color.decode("#FCFEFC"));
+        jScrollPane2.setBorder(BorderFactory.createEmptyBorder());
+        a_list_panel.add(filter_panel, BorderLayout.NORTH);
+        a_list_panel.add(jScrollPane2, BorderLayout.CENTER);
+        
+        
 
         /*JLabel p = new JLabel(new ImageIcon(resource+"movie-reels-and-popcorn.png"), JLabel.CENTER);
         p.setMaximumSize(new Dimension(Short.MAX_VALUE,Short.MAX_VALUE));
         p.setPreferredSize(new Dimension(500,328));
         p.setBackground(Color.decode("#FCFEFC"));
         */
-        actionPlanPanel.add(pane, BorderLayout.NORTH);
-        actionPlanPanel.add(pane2, BorderLayout.CENTER);
+        actionPlanPanel.add(ap_information_panel, BorderLayout.NORTH);
+        actionPlanPanel.add(a_list_panel, BorderLayout.CENTER);
         
     }
     
@@ -852,5 +898,49 @@ public class TerminalGUI extends JFrame{
     
     private void setAPSumary(ActionPlan plan){
         
+    }
+    
+    private void createFilterPanel(){
+        filter_panel = new JPanel();
+        filter_panel.setLayout(new BoxLayout(filter_panel, BoxLayout.LINE_AXIS));
+        filter_panel.setPreferredSize(new Dimension(actionPlanPanel.getMaximumSize().height, 40));
+        JLabel filterLabel = new JLabel("Filter by");
+        filterLabel.setHorizontalAlignment(JLabel.CENTER);
+        filterLabel.setPreferredSize(new Dimension(60,filter_panel.getPreferredSize().height));
+        filterCombobox = new JComboBox();
+        filterCombobox.setMaximumSize(new Dimension(140,26));
+        filterCombobox.setModel(new DefaultComboBoxModel<>(new Object[]
+            {"DATE", "RESPONSIBLE","STATUS"}
+        ));
+
+        filter_panel.add(filterLabel);
+        filter_panel.add(filterCombobox);
+        filter_panel.add(Box.createRigidArea(new Dimension(20,26)));
+        filter_content_comboBox = new JComboBox();
+        filter_content_comboBox.setPreferredSize(new Dimension(140,26));
+        filter_panel.add(filter_content_comboBox);
+        filter_panel.add(Box.createHorizontalGlue());
+        add_action_label = new JLabel();
+        add_action_label.setIcon(new ImageIcon(resource+"plus-24.png"));
+        add_action_label.setPreferredSize(new Dimension(30,filter_panel.getPreferredSize().height));
+        add_action_label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){}
+            @Override
+            public void mouseExited(MouseEvent e){}
+            @Override
+            public void mouseClicked(MouseEvent e){
+                AddActionForm add_action = new AddActionForm();
+            }
+        }); 
+        modify_action_label = new JLabel();
+        modify_action_label.setIcon(new ImageIcon(resource+"edit-24.png"));
+        modify_action_label.setPreferredSize(new Dimension(30,filter_panel.getPreferredSize().height));
+        delete_action_label = new JLabel();
+        delete_action_label.setIcon(new ImageIcon(resource+"delete-24.png"));
+        delete_action_label.setPreferredSize(new Dimension(30, filter_panel.getPreferredSize().height));
+        filter_panel.add(add_action_label);
+        filter_panel.add(modify_action_label);
+        filter_panel.add(delete_action_label);
     }
 }
