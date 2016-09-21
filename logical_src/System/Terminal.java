@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -141,9 +142,9 @@ public class Terminal{
             plan = new ActionPlan();
         ArrayList<Action> list = new ArrayList();
         DefaultTableModel dm = new DefaultTableModel(null, new String [] {
-                "Id","Responsible", "Detail", "Comments", 
+                "ID","Resp.", "Detail", "Comments", 
                 "P.Start Date", "P.Finish Date", "R.Finish Date",
-                "Progress", "Status", "Duration"
+                "Prog. %", "Status", "Dur."
             }){
                 public boolean isCellEditable(int row, int column){
                     return false;
@@ -254,21 +255,18 @@ public class Terminal{
         return null;
     }
     
-    private ArrayList getCollaborators(String id) throws SQLException{
+    private ArrayList getCollaborators(String facility_id) throws SQLException{
         int collaborator_id,count=0;
         String query;
-        Array result;
-        ArrayList<Collaborator> list = new ArrayList<>();
+        Object[] result;
+        ArrayList<Collaborator> list = new ArrayList();
         
-        query = "SELECT collaborator_id FROM planb.facility_collaborator where id='"+id+"';";
-        ResultSet rs = planB_DB.selectQuery(query);
-        if(rs != null){
-            result = rs.getArray("collaborator_id");
-            int [] collaborators = (int[])result.getArray();
-            while(count == collaborators.length){
-                collaborator_id = collaborators[count];
-                query = "SELECT firstname, middlename,lastname,acronym_name,charge FROM planb.collaborator where employee_id="+collaborator_id+";";
-                rs = planB_DB.selectQuery(query);
+        result = getCollaboratorIds(facility_id);
+        if(result != null){
+            while(count != result.length){
+                collaborator_id = (int)result[count];
+                query = "SELECT firstname, middlename,lastname,acronym_name,charge FROM planb.collaborator WHERE employee_id="+collaborator_id+";";
+                ResultSet rs = planB_DB.selectQuery(query);
                 while(rs.next()){
                     Collaborator collaborator = new Collaborator();
                     collaborator.setEmployeeId(collaborator_id);
@@ -386,5 +384,85 @@ public class Terminal{
     
     public Object[] getMeetingsNames(){
         return APSys.org.getFacility("01").getMeetingsNames().toArray();
+    }
+    
+    public Object[] getCollaboratorIds(String facility_id) throws SQLException{
+        String query;
+        ArrayList list = new ArrayList();
+        
+        query = "SELECT collaborator_id FROM planb.facility_collaborator WHERE facility_id='"+facility_id+"';";
+        ResultSet rs = planB_DB.selectQuery(query);
+        if(rs != null){
+            while(rs.next())
+                list.add(rs.getInt("collaborator_id"));
+            return list.toArray();
+        }
+        return null;
+    }
+    
+    public void addAction(String responsible, String detail, String comments, 
+            String planned_start_date, String planned_finish_date, 
+            String status, byte progress, byte duration, String meeting_name) throws Exception{
+
+        Facility facility = APSys.org.getFacility("01"); 
+        Meeting meeting = facility.searchMeeting(meeting_name);
+        short number;
+        Action action;
+        String query = "SELECT COUNT(*) as number from planb.action INNER JOIN "
+                + "planb.actionplan_action ON id=action_id and "
+                + "actionplan_id="+meeting.getActionPlan().getId()+";";
+        planB_DB.connection();
+        ResultSet rs = planB_DB.selectQuery(query);
+        if(rs != null){
+            rs.next();
+            number = (short)rs.getInt("number");
+            action = new Action("01", meeting.getAcronym(), number, meeting.getActionPlan().getZeros());
+            action.setDetail(detail);
+            action.setComments(comments);
+            action.setResponsible(facility.searchCollaborator(responsible));
+            action.setPlannedStartDate(parseDate(planned_start_date));
+            action.setPlannedFinishDate(parseDate(planned_finish_date));
+            action.setRealFinishDate(null);
+            action.setStatus(Status.valueOf(status));
+            action.setProgress((byte)progress);
+            action.setDuration(duration);
+            meeting.getActionPlan().getActionList().add(action);
+            saveActionToDatabase(action, meeting);
+            APSys.getTerminalGUI().updateTableContent(new Object[]{
+                action.getID(),action.getResponsible().getAcronymName(),
+                action.getDetail(),action.getComments(),action.getPlannedStartDate().toString(),
+                action.getPlannedFinishDate().toString(),action.getRealFinishDate().toString(),
+                action.getProgress(),action.getStatus().toString(),action.getDuration()
+            });
+        }
+        
+    }
+    
+    private void saveActionToDatabase(Action action, Meeting meeting) throws SQLException{
+        String query, values;
+        int is_row_inserted,action_id,actionplan_id,employee_id;
+        values = "('"+action.getID()+"','"+action.getDetail()+"','"+action.getComments()
+                +"','"+action.getPlannedStartDate().toString()+"','"
+                +action.getPlannedFinishDate().toString()+"','"
+                +action.getDateCreated().toLocalDate().toString()+" "
+                +action.getDateCreated().toLocalTime().toString()+"',"
+                +action.getStatus().getValue()+","+(int)action.getProgress()+")";
+        query = "INSERT INTO planb.action (item_id,detail,comments,"
+            + "p_start_date,p_finish_date,date_created,status,progress) "
+            + "VALUES "+values+";";
+        is_row_inserted = planB_DB.insertQuery(query);
+        
+        query = "SELECT id FROM planb.action where item_id='"+action.getID()+"';";
+        ResultSet rs = planB_DB.selectQuery(query);
+        rs.next();
+        action_id = rs.getInt("id");
+        actionplan_id = meeting.getActionPlan().getId();
+        query = "INSERT INTO planb.actionplan_action (actionplan_id,action_id) "
+                + "VALUES ("+actionplan_id+","+action_id+");";
+        is_row_inserted = planB_DB.insertQuery(query);
+        employee_id = action.getResponsible().getEmployeeId();
+        query = "INSERT INTO planb.collaborator_action (collaborator_id,action_id) "
+                + "VALUES ("+employee_id+","+action_id+");";
+        planB_DB.insertQuery(query);
     }
 }

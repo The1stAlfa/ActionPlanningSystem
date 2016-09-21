@@ -38,8 +38,9 @@ public class Action {
     /** 
     * Class Empty constructor.
     */
-    public Action(int facilty_id, String meeting, short number, byte zeros){
-        setID(facilty_id, meeting,number, zeros);
+    public Action(String facility_id, String meeting_acronym_name, short number, byte zeros){
+        setID(facility_id, meeting_acronym_name,number, zeros);
+        this.setDateCreated(LocalDateTime.now());
     }
     
     /**
@@ -231,8 +232,8 @@ public class Action {
      * @param meeting_name
      * @param fa_name
      */
-    public void setID(int facility_id, String meeting_name, short number, byte zeros) {
-        itemID = String.format("%d%s%0" + zeros + "d", facility_id, meeting_name,
+    public void setID(String facility_id, String meeting_acronym_name, short number, byte zeros) {
+        itemID = String.format("%s%s%0" + zeros + "d", facility_id, meeting_acronym_name,
                 (int)number + 1);
     }
 

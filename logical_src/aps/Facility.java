@@ -99,4 +99,15 @@ public class Facility {
         }
         return null;
     }
+    
+    public Collaborator searchCollaborator(String names){
+        for(Collaborator collaborator: this.getCollaboratorList()){
+            String collaborator_names = collaborator.getFirstName()+" "+ 
+                    collaborator.getMiddleName() +" "+ collaborator.getLastName();
+            if(collaborator_names.equalsIgnoreCase(names))
+                return collaborator;
+        }
+        return null;
+    }
+
 }

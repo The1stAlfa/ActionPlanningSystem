@@ -126,7 +126,7 @@ public class ActionPlan {
         else if(n.length() > initial_zeros)
             this.zeros = (byte)(n.length()+1);
         else
-            this.zeros = (byte)(initial_zeros - (byte)n.length());
+            this.zeros = initial_zeros;
     }
     
     public Action searchAction(String key){

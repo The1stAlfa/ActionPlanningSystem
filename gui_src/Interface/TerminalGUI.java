@@ -61,6 +61,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * @palette
@@ -102,7 +103,7 @@ public class TerminalGUI extends JFrame{
     public JLabel hallLabel, movieLabel, aboutLabel, settingsLabel, userLabel;
     private JLabel initImageLabel;
     private String resource, meetingName;
-    JLabel apLabel, owLabel, parLabel, meetLabel, actLabel, compLabel, 
+    private JLabel apLabel, owLabel, parLabel, meetLabel, actLabel, compLabel, 
                 compAppLabel, overAppLabel, actContentLabel, owContentLabel,
                 compContentLabel, compAppContentLabel, overAppContentLabel, 
                 performanceLabel, exeLabel, performanceContentLabel, 
@@ -110,6 +111,7 @@ public class TerminalGUI extends JFrame{
     private JPanel filter_panel, ap_information_panel, a_list_panel;
     private JLabel add_action_label, modify_action_label, delete_action_label;
     private JComboBox filter_content_comboBox,filterCombobox;
+    private JTable jTable1; 
     private boolean menuFlag = false, resizeFlag = false;
 
        
@@ -439,7 +441,7 @@ public class TerminalGUI extends JFrame{
     private void createActionPlanPanel() throws Exception{
         GridBagConstraints gbc = new GridBagConstraints();
         JComboBox meetComboBox = new JComboBox();
-        JTable jTable1 = new JTable();
+        jTable1 = new JTable();
         JScrollPane jScrollPane1, jScrollPane2;
         JTextPane jTextPane1 = new JTextPane();
         
@@ -527,13 +529,10 @@ public class TerminalGUI extends JFrame{
             meetingSelected(event);
             try {
                 ActionPlan plan = (ActionPlan)APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[0];
-                jTable1.setModel((TableModel) APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[1]);
-                jTable1.getColumnModel().getColumn(0).setMaxWidth(75);
-                jTable1.getColumnModel().getColumn(1).setMaxWidth(80);
-                jTable1.getColumnModel().getColumn(4).setMaxWidth(75);
-                jTable1.getColumnModel().getColumn(5).setMaxWidth(75);
-                jTable1.getColumnModel().getColumn(6).setMaxWidth(75);
-
+                jTable1.setModel((TableModel) APSys.getTerminal().getTableContent(ActionItemFilter.ALL, meetingName)[1]);                
+                setColumnWidth();
+                centerColumnContent();
+               
                 /*
                 jTable1.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer(){
                     JLabel edit = new JLabel();
@@ -766,21 +765,21 @@ public class TerminalGUI extends JFrame{
         createFilterPanel();
         //  Action List Table
         jTable1.setModel(new DefaultTableModel(null, new String [] {
-                "Id", "Responsible", "Detail", "Comments", 
+                "ID", "Resp.", "Detail", "Comments", 
                 "P.Start Date", "P.Finish Date", "R.Finish Date",
-                "Progress", "Status", "Duration"
+                "Prog. %", "Status", "Dur."
             }));
         jTable1.setMinimumSize(new Dimension(300, 200));
         jTable1.setBackground(Color.decode("#FCFEFC"));
         jTable1.setAutoCreateRowSorter(true);
-        jTable1.setRowHeight(50);
+        jTable1.setRowHeight(30);
         jTable1.setGridColor(Color.decode("#FCFEFC"));
         jTable1.setFillsViewportHeight(true);
         //jTable1.setFocusable(true);
         jTable1.setSelectionBackground(Color.decode("#303132"));
         jTable1.setSelectionForeground(Color.decode("#C9CDD1"));
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(50);
+        setColumnWidth();
         /*
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
                     @Override
@@ -917,12 +916,12 @@ public class TerminalGUI extends JFrame{
         filter_panel.add(filterCombobox);
         filter_panel.add(Box.createRigidArea(new Dimension(20,26)));
         filter_content_comboBox = new JComboBox();
-        filter_content_comboBox.setPreferredSize(new Dimension(140,26));
+        filter_content_comboBox.setMaximumSize(new Dimension(140,26));
         filter_panel.add(filter_content_comboBox);
         filter_panel.add(Box.createHorizontalGlue());
         add_action_label = new JLabel();
         add_action_label.setIcon(new ImageIcon(resource+"plus-24.png"));
-        add_action_label.setPreferredSize(new Dimension(30,filter_panel.getPreferredSize().height));
+        add_action_label.setPreferredSize(new Dimension(35,filter_panel.getPreferredSize().height));
         add_action_label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e){}
@@ -930,17 +929,49 @@ public class TerminalGUI extends JFrame{
             public void mouseExited(MouseEvent e){}
             @Override
             public void mouseClicked(MouseEvent e){
-                AddActionForm add_action = new AddActionForm();
+                AddActionForm add_action = new AddActionForm(meetingName,APSys.getTerminal());
             }
         }); 
         modify_action_label = new JLabel();
         modify_action_label.setIcon(new ImageIcon(resource+"edit-24.png"));
-        modify_action_label.setPreferredSize(new Dimension(30,filter_panel.getPreferredSize().height));
+        modify_action_label.setPreferredSize(new Dimension(35,filter_panel.getPreferredSize().height));
         delete_action_label = new JLabel();
         delete_action_label.setIcon(new ImageIcon(resource+"delete-24.png"));
-        delete_action_label.setPreferredSize(new Dimension(30, filter_panel.getPreferredSize().height));
+        delete_action_label.setPreferredSize(new Dimension(35, filter_panel.getPreferredSize().height));
         filter_panel.add(add_action_label);
         filter_panel.add(modify_action_label);
         filter_panel.add(delete_action_label);
+    }
+    private void centerColumnContent(){
+         jTable1.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, 
+                    Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if(!(column ==2 || column ==3) )
+                    DEFAULT_RENDERER.setHorizontalAlignment(SwingConstants.CENTER);
+                c.setBackground(row%2==0 ? Color.WHITE : Color.LIGHT_GRAY); 
+                return c;
+            }
+        });
+    }
+    
+    private void setColumnWidth(){       
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(75);  //ID
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(40);  //RESPONSIBLE
+        jTable1.getColumnModel().getColumn(4).setMaxWidth(73);  //P.START DATE
+        jTable1.getColumnModel().getColumn(5).setMaxWidth(73);  //P.FINISH DATE
+        jTable1.getColumnModel().getColumn(6).setMaxWidth(73);  //R.FINISH DATE
+        jTable1.getColumnModel().getColumn(7).setMaxWidth(50);  //PROGRESS
+        jTable1.getColumnModel().getColumn(8).setMinWidth(120); //STATUS
+        jTable1.getColumnModel().getColumn(8).setMaxWidth(120); 
+        jTable1.getColumnModel().getColumn(9).setMaxWidth(40);  //DURATION
+    }
+    
+    public void updateTableContent(Object[] row){
+        DefaultTableModel dm = (DefaultTableModel) jTable1.getModel();
+        dm.addRow(row);
+        jTable1.setModel(dm);
     }
 }
